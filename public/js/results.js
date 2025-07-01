@@ -206,7 +206,10 @@ class ResultsPage {
             }
             
             if (user) {
-                // User is signed in - show user info in header and recent games
+                // User is signed in - hide auth section and show recent games
+                if (authSection) {
+                    authSection.style.display = 'none';
+                }
                 if (userSection && window.authManager) {
                     window.authManager.renderUserSection();
                 }

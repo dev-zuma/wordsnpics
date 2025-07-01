@@ -182,20 +182,31 @@ class LeagueDetailsManager {
             return;
         }
 
+        // Add toggle button for expand/collapse
+        const isExpanded = this.isTableExpanded('overall');
+        const toggleButton = `
+            <div class="table-controls">
+                <button class="toggle-table-btn" data-table="overall">
+                    ${isExpanded ? 'Collapse' : 'Expand'} View
+                </button>
+            </div>
+        `;
+
         const tableHTML = `
-            <div class="rankings-header">
+            ${toggleButton}
+            <div class="rankings-header ${isExpanded ? 'expanded' : 'collapsed'}">
                 <div class="rank-col">Rank</div>
                 <div class="player-col">Player</div>
                 <div class="stat-col">Games<br>Played</div>
                 <div class="stat-col">Games<br>Won</div>
-                <div class="stat-col">Games<br>%</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Win<br>%</div>
                 <div class="stat-col">Words<br>Played</div>
                 <div class="stat-col">Words<br>Correct</div>
-                <div class="stat-col">Words<br>%</div>
-                <div class="stat-col">Avg<br>Time</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>%</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Avg<br>Time</div>
             </div>
             ${this.rankings.overall.map((player, index) => `
-                <div class="rankings-row ${player.is_current_user ? 'current-user' : ''}">
+                <div class="rankings-row ${player.is_current_user ? 'current-user' : ''} ${isExpanded ? 'expanded' : 'collapsed'}">
                     <div class="rank-col rank-${index + 1}">#${index + 1}</div>
                     <div class="player-col">
                         <div class="player-avatar" style="background-color: ${player.avatar_color || '#3498db'}">
@@ -205,11 +216,11 @@ class LeagueDetailsManager {
                     </div>
                     <div class="stat-col">${player.games_played || 0}</div>
                     <div class="stat-col">${player.games_won || 0}</div>
-                    <div class="stat-col">${this.formatPercentage(player.win_percentage)}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.win_percentage)}</div>
                     <div class="stat-col">${player.words_played || 0}</div>
                     <div class="stat-col">${player.words_correct || 0}</div>
-                    <div class="stat-col">${this.formatPercentage(player.word_percentage)}</div>
-                    <div class="stat-col">${this.formatTime(player.avg_time)}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.word_percentage)}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.avg_time || '-'}</div>
                 </div>
             `).join('')}
         `;
@@ -234,47 +245,59 @@ class LeagueDetailsManager {
             return;
         }
 
-        const boardHTML = Object.entries(this.rankings.boards).map(([boardType, players]) => `
-            <div class="leagues-section">
-                <div class="section-header">
-                    <h3>${this.formatBoardType(boardType)} Rankings</h3>
-                    <span class="section-subtitle">${players.length} players</span>
+        const boardHTML = Object.entries(this.rankings.boards).map(([boardType, players]) => {
+            const isExpanded = this.isTableExpanded(boardType);
+            const toggleButton = `
+                <div class="table-controls">
+                    <button class="toggle-table-btn" data-table="${boardType}">
+                        ${isExpanded ? 'Collapse' : 'Expand'} View
+                    </button>
                 </div>
-                <div class="rankings-table-container">
-                    <div class="rankings-table">
-                        <div class="rankings-header">
-                            <div class="rank-col">Rank</div>
-                            <div class="player-col">Player</div>
-                            <div class="stat-col">Games<br>Played</div>
-                            <div class="stat-col">Games<br>Won</div>
-                            <div class="stat-col">Games<br>%</div>
-                            <div class="stat-col">Words<br>Played</div>
-                            <div class="stat-col">Words<br>Correct</div>
-                            <div class="stat-col">Words<br>%</div>
-                            <div class="stat-col">Avg<br>Time</div>
-                        </div>
-                        ${players.map((player, index) => `
-                            <div class="rankings-row ${player.is_current_user ? 'current-user' : ''}">
-                                <div class="rank-col rank-${index + 1}">#${index + 1}</div>
-                                <div class="player-col">
-                                    <div class="player-avatar" style="background-color: ${player.avatar_color || '#3498db'}">
-                                        ${this.renderAvatar(player.avatar_icon, player.display_name)}
-                                    </div>
-                                    <span class="player-name">${this.escapeHtml(player.nickname || player.display_name)}</span>
-                                </div>
-                                <div class="stat-col">${player.games_played || 0}</div>
-                                <div class="stat-col">${player.games_won || 0}</div>
-                                <div class="stat-col">${this.formatPercentage(player.win_percentage)}</div>
-                                <div class="stat-col">${player.words_played || 0}</div>
-                                <div class="stat-col">${player.words_correct || 0}</div>
-                                <div class="stat-col">${this.formatPercentage(player.word_percentage)}</div>
-                                <div class="stat-col">${this.formatTime(player.avg_time)}</div>
+            `;
+            
+            return `
+                <div class="leagues-section">
+                    <div class="section-header">
+                        <h3>${this.formatBoardType(boardType)} Rankings</h3>
+                        <span class="section-subtitle">${players.length} players</span>
+                    </div>
+                    ${toggleButton}
+                    <div class="rankings-table-container">
+                        <div class="rankings-table">
+                            <div class="rankings-header ${isExpanded ? 'expanded' : 'collapsed'}">
+                                <div class="rank-col">Rank</div>
+                                <div class="player-col">Player</div>
+                                <div class="stat-col">Games<br>Played</div>
+                                <div class="stat-col">Games<br>Won</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Win<br>%</div>
+                                <div class="stat-col">Words<br>Played</div>
+                                <div class="stat-col">Words<br>Correct</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>%</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Avg<br>Time</div>
                             </div>
-                        `).join('')}
+                            ${players.map((player, index) => `
+                                <div class="rankings-row ${player.is_current_user ? 'current-user' : ''} ${isExpanded ? 'expanded' : 'collapsed'}">
+                                    <div class="rank-col rank-${index + 1}">#${index + 1}</div>
+                                    <div class="player-col">
+                                        <div class="player-avatar" style="background-color: ${player.avatar_color || '#3498db'}">
+                                            ${this.renderAvatar(player.avatar_icon, player.display_name)}
+                                        </div>
+                                        <span class="player-name">${this.escapeHtml(player.nickname || player.display_name)}</span>
+                                    </div>
+                                    <div class="stat-col">${player.games_played || 0}</div>
+                                    <div class="stat-col">${player.games_won || 0}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.win_percentage)}</div>
+                                    <div class="stat-col">${player.words_played || 0}</div>
+                                    <div class="stat-col">${player.words_correct || 0}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.word_percentage)}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.avg_time || '-'}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
         boardRankings.innerHTML = boardHTML;
     }
@@ -373,6 +396,14 @@ class LeagueDetailsManager {
                 this.hideModal('shareModal');
             }
         });
+
+        // Table toggle functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('toggle-table-btn')) {
+                const tableId = e.target.getAttribute('data-table');
+                this.toggleTable(tableId);
+            }
+        });
     }
 
     async copyToClipboard(inputId, message) {
@@ -445,12 +476,6 @@ class LeagueDetailsManager {
         return `${Math.round(value)}%`;
     }
 
-    formatTime(seconds) {
-        if (!seconds || seconds === 0) return '-';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.round(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
 
     formatBoardType(boardType) {
         return boardType.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -489,6 +514,27 @@ class LeagueDetailsManager {
         
         // Otherwise use first letter of display name
         return displayName ? displayName.charAt(0).toUpperCase() : '?';
+    }
+
+    isTableExpanded(tableId) {
+        // Default to collapsed state, use localStorage to persist state
+        const storageKey = `league_table_${tableId}_expanded`;
+        return localStorage.getItem(storageKey) === 'true';
+    }
+
+    toggleTable(tableId) {
+        const isExpanded = this.isTableExpanded(tableId);
+        const storageKey = `league_table_${tableId}_expanded`;
+        
+        // Toggle state
+        localStorage.setItem(storageKey, (!isExpanded).toString());
+        
+        // Re-render the appropriate table
+        if (tableId === 'overall') {
+            this.displayOverallRankings();
+        } else {
+            this.displayBoardRankings();
+        }
     }
 
     escapeHtml(text) {

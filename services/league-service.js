@@ -278,9 +278,7 @@ class LeagueService {
                             ELSE 0 
                         END, 1
                     ) as word_percentage,
-                    ROUND(
-                        AVG(CASE WHEN gs.time_elapsed IS NOT NULL THEN gs.time_elapsed ELSE NULL END), 0
-                    ) as avg_time,
+                    AVG(CASE WHEN gs.time_elapsed IS NOT NULL THEN gs.time_elapsed ELSE NULL END) as avg_time_seconds,
                     MAX(gs.completed_at) as last_played
                 FROM league_members lm
                 JOIN profiles p ON lm.profile_id = p.id
@@ -304,6 +302,16 @@ class LeagueService {
                 const member = stmt.getAsObject();
                 member.rank = rank++;
                 member.score = this.calculateMemberScore(member, 'standard'); // Default to standard scoring
+                
+                // Format average time to mm:ss
+                if (member.avg_time_seconds && member.avg_time_seconds > 0) {
+                    const minutes = Math.floor(member.avg_time_seconds / 60);
+                    const seconds = Math.round(member.avg_time_seconds % 60);
+                    member.avg_time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    member.avg_time = '-';
+                }
+                
                 leaderboard.push(member);
             }
             stmt.free();
