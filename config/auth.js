@@ -24,6 +24,7 @@ passport.deserializeUser(async (id, done) => {
 
 // Google OAuth Strategy
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    console.log('🔐 Configuring Google OAuth with Client ID:', process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...');
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
