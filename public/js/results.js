@@ -823,8 +823,8 @@ class ResultsPage {
             return;
         }
         
-        // Test if images are actually available, use gradients as fallback
-        const useGradientFallback = true; // For now, since images are missing
+        // Try to use direct S3 URLs first (with CORS policy), fallback to proxy if needed
+        const useGradientFallback = false;
         
         // Sort images by word count
         const sortedImages = [...puzzleImages].sort((a, b) => b.matchCount - a.matchCount);
@@ -870,16 +870,22 @@ class ResultsPage {
                             resolve();
                         };
                         img.onerror = () => {
-                            // Fallback colored rectangle
+                            // If direct S3 URL fails, try the proxy as fallback
+                            if (!img.src.includes('/api/image-proxy')) {
+                                console.log(`Direct S3 URL failed, trying proxy for: ${image.url}`);
+                                const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(image.url)}`;
+                                img.src = proxyUrl;
+                                return; // Don't resolve yet, let the proxy attempt complete
+                            }
+                            
+                            // If proxy also fails, draw colored rectangle fallback
+                            console.log(`Both direct and proxy failed for: ${image.url}, using fallback`);
                             ctx.fillStyle = this.getTurnColor(i + 1);
                             ctx.fillRect(i * stripWidth, 0, stripWidth, stripHeight);
                             resolve();
                         };
-                        // Use image proxy for CORS-enabled access when drawing to canvas
-                        const proxyUrl = image.url.startsWith('https://wordsnpics-images-') 
-                            ? `/api/image-proxy?url=${encodeURIComponent(image.url)}`
-                            : image.url;
-                        img.src = proxyUrl;
+                        // Try direct S3 URL first (should work with CORS policy)
+                        img.src = image.url;
                     });
                 } catch (error) {
                     // Fallback
