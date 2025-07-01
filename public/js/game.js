@@ -285,21 +285,21 @@ class WORDLINKSGame {
     showPuzzleCountdown(dailyData) {
         const { timeUntilRelease, releaseTime, message } = dailyData;
         
+        // Hide the game interface elements
+        document.getElementById('carouselContainer').style.display = 'none';
+        document.querySelector('.words-per-image-section').style.display = 'none';
+        document.querySelector('.game-controls-bar').style.display = 'none';
+        
         document.getElementById('wordsGrid').innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: var(--primary);">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">⏰</div>
-                <h2 style="margin-bottom: 1rem;">Today's Puzzle Coming Soon!</h2>
-                <p style="margin-bottom: 2rem; color: var(--text-secondary);">${message}</p>
-                <div id="countdown" style="font-size: 2rem; font-weight: bold; color: var(--primary); margin-bottom: 2rem;">
+            <div class="countdown-container">
+                <div class="countdown-icon">⏰</div>
+                <h2 class="countdown-title">Today's Puzzle<br>Coming Soon!</h2>
+                <p class="countdown-message">Today's puzzle will be available at<br><strong>12:00 PM UTC</strong></p>
+                <div id="countdown" class="countdown-timer">
                     --:--:--
                 </div>
-                <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                    Releases at ${new Date(releaseTime).toLocaleString()}
-                </p>
-                <p style="margin-top: 2rem;">
-                    <a href="/?boardType=demo" style="color: var(--primary);">
-                        Play a practice puzzle while you wait →
-                    </a>
+                <p class="countdown-release-time">
+                    Releases at<br>${new Date(releaseTime).toLocaleString()}
                 </p>
             </div>
         `;
