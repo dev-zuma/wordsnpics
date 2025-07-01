@@ -532,6 +532,8 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
     const { boardType } = req.params;
     const currentDate = new Date().toISOString().split('T')[0];
     
+    console.log(`🎮 Daily puzzle request: boardType="${boardType}", date="${currentDate}"`);
+    
     // Add cache headers for proper timing
     res.set({
       'Cache-Control': 'public, max-age=300', // 5 minute cache
@@ -544,6 +546,7 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
     
     // Get the daily puzzle for today
     const boards = await wordsnpicsDb.getAllBoards(boardType, true);
+    console.log(`   Found ${boards.length} boards for boardType="${boardType}"`);
     
     // Find today's daily puzzle
     const dailyBoard = boards.find(board => 
@@ -553,6 +556,13 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
     );
     
     if (!dailyBoard) {
+      console.log(`   ❌ No daily board found for ${boardType} on ${currentDate}`);
+      console.log(`   Available boards:`, boards.map(b => ({
+        id: b.id,
+        scheduled_date: b.scheduled_date,
+        is_daily: b.is_daily,
+        is_published: b.is_published
+      })));
       return res.status(404).json({ 
         error: 'No daily puzzle available',
         message: `No daily puzzle found for ${boardType} on ${currentDate}`,
@@ -560,12 +570,17 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
       });
     }
     
+    console.log(`   ✅ Found daily board: ${dailyBoard.title} (${dailyBoard.id})`);
+    
     // Get full board content
     const fullBoard = await wordsnpicsDb.getBoardById(dailyBoard.id, true);
     
     if (!fullBoard) {
+      console.log(`   ❌ Board content not found for ID: ${dailyBoard.id}`);
       return res.status(404).json({ error: 'Board content not found' });
     }
+    
+    console.log(`   Board has ${fullBoard.images?.length || 0} images and ${fullBoard.words?.length || 0} words`);
     
     // Check if this puzzle should be released yet (12 PM UTC)
     const releaseTime = new Date(`${currentDate}T12:00:00.000Z`);
