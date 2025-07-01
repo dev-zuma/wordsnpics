@@ -54,6 +54,39 @@ router.get('/puzzle/daily', async (req, res) => {
   }
 });
 
+// Image proxy for CORS-enabled S3 images
+router.get('/image-proxy', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || !url.startsWith('https://wordsnpics-images-')) {
+      return res.status(400).json({ error: 'Invalid image URL' });
+    }
+    
+    // Fetch image from S3
+    const response = await fetch(url);
+    if (!response.ok) {
+      return res.status(404).json({ error: 'Image not found' });
+    }
+    
+    // Set CORS headers and pipe the image
+    res.set({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET',
+      'Content-Type': response.headers.get('content-type') || 'image/png',
+      'Cache-Control': 'public, max-age=31536000'
+    });
+    
+    // Stream the image data
+    const buffer = await response.arrayBuffer();
+    res.send(Buffer.from(buffer));
+    
+  } catch (error) {
+    console.error('Image proxy error:', error);
+    res.status(500).json({ error: 'Failed to proxy image' });
+  }
+});
+
 // Get random puzzle (for backwards compatibility with demo endpoint)
 router.get('/puzzle/demo', async (req, res) => {
   try {

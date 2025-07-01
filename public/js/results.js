@@ -875,7 +875,11 @@ class ResultsPage {
                             ctx.fillRect(i * stripWidth, 0, stripWidth, stripHeight);
                             resolve();
                         };
-                        img.src = image.url;
+                        // Use image proxy for CORS-enabled access when drawing to canvas
+                        const proxyUrl = image.url.startsWith('https://wordsnpics-images-') 
+                            ? `/api/image-proxy?url=${encodeURIComponent(image.url)}`
+                            : image.url;
+                        img.src = proxyUrl;
                     });
                 } catch (error) {
                     // Fallback
