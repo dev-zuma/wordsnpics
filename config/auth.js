@@ -28,7 +28,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.NODE_ENV === 'production' 
-            ? `https://${process.env.RENDER_EXTERNAL_URL || 'wordsnpics.onrender.com'}/auth/google/callback`
+            ? "https://wordsnpics.onrender.com/auth/google/callback"
             : "/auth/google/callback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {
@@ -61,7 +61,7 @@ if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
         callbackURL: process.env.NODE_ENV === 'production' 
-            ? `https://${process.env.RENDER_EXTERNAL_URL || 'wordsnpics.onrender.com'}/auth/facebook/callback`
+            ? "https://wordsnpics.onrender.com/auth/facebook/callback"
             : "/auth/facebook/callback",
         profileFields: ['id', 'displayName', 'emails', 'photos']
     }, async (accessToken, refreshToken, profile, done) => {
