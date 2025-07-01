@@ -58,14 +58,18 @@ router.get('/puzzle/daily', async (req, res) => {
 router.get('/image-proxy', async (req, res) => {
   try {
     const { url } = req.query;
+    console.log('🖼️ Image proxy request for:', url);
     
     if (!url || !url.startsWith('https://wordsnpics-images-')) {
+      console.log('❌ Invalid URL:', url);
       return res.status(400).json({ error: 'Invalid image URL' });
     }
     
     // Fetch image from S3
+    console.log('📥 Fetching from S3:', url);
     const response = await fetch(url);
     if (!response.ok) {
+      console.log('❌ S3 fetch failed:', response.status, response.statusText);
       return res.status(404).json({ error: 'Image not found' });
     }
     
@@ -79,10 +83,11 @@ router.get('/image-proxy', async (req, res) => {
     
     // Stream the image data
     const buffer = await response.arrayBuffer();
+    console.log('✅ Image proxied successfully, size:', buffer.byteLength, 'bytes');
     res.send(Buffer.from(buffer));
     
   } catch (error) {
-    console.error('Image proxy error:', error);
+    console.error('❌ Image proxy error:', error);
     res.status(500).json({ error: 'Failed to proxy image' });
   }
 });

@@ -549,10 +549,13 @@ class ResultsPage {
                         const image = puzzleImages.find(img => img.id === imageId);
                         if (image && image.url) {
                             
-                            // Create an image element to test if the URL loads
+                            // Use proxy for all background images to avoid CORS issues
+                            const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(image.url)}`;
+                            
+                            // Create an image element to test if the proxy URL loads
                             const testImg = new Image();
                             testImg.onload = () => {
-                                cell.style.backgroundImage = `url(${image.url})`;
+                                cell.style.backgroundImage = `url(${proxyUrl})`;
                                 cell.style.backgroundSize = 'cover';
                                 cell.style.backgroundPosition = 'center';
                             };
@@ -568,7 +571,7 @@ class ResultsPage {
                                 const gradientIndex = parseInt(imageId.slice(-1)) || 0;
                                 cell.style.background = gradients[gradientIndex % gradients.length];
                             };
-                            testImg.src = image.url;
+                            testImg.src = proxyUrl;
                         }
                     }
                 }
@@ -870,22 +873,15 @@ class ResultsPage {
                             resolve();
                         };
                         img.onerror = () => {
-                            // If direct S3 URL fails, try the proxy as fallback
-                            if (!img.src.includes('/api/image-proxy')) {
-                                console.log(`Direct S3 URL failed, trying proxy for: ${image.url}`);
-                                const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(image.url)}`;
-                                img.src = proxyUrl;
-                                return; // Don't resolve yet, let the proxy attempt complete
-                            }
-                            
-                            // If proxy also fails, draw colored rectangle fallback
-                            console.log(`Both direct and proxy failed for: ${image.url}, using fallback`);
+                            // If proxy fails, draw colored rectangle fallback
+                            console.log(`Proxy failed for: ${image.url}, using color fallback`);
                             ctx.fillStyle = this.getTurnColor(i + 1);
                             ctx.fillRect(i * stripWidth, 0, stripWidth, stripHeight);
                             resolve();
                         };
-                        // Try direct S3 URL first (should work with CORS policy)
-                        img.src = image.url;
+                        // Always use proxy for canvas operations to avoid CORS issues
+                        const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(image.url)}`;
+                        img.src = proxyUrl;
                     });
                 } catch (error) {
                     // Fallback
