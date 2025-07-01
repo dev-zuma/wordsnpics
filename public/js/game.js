@@ -1024,7 +1024,7 @@ class WORDLINKSGame {
         const closeHelpBtn = document.getElementById('closeHelpModal');
         
         solveBtn.addEventListener('click', () => this.checkSolution());
-        resetBtn.addEventListener('click', () => this.resetGame());
+        resetBtn.addEventListener('click', () => this.resetCurrentTurn());
         
         // Help modal functionality
         helpBtn.addEventListener('click', () => {
@@ -1068,6 +1068,33 @@ class WORDLINKSGame {
         if (solveBtn) {
             solveBtn.textContent = this.getSubmitButtonText();
         }
+    }
+    
+    resetCurrentTurn() {
+        // Only reset placements for words that are not already correct
+        const wordsToReset = [];
+        
+        // Find words that are placed but not correct (can be reset)
+        Object.keys(this.placements).forEach(wordId => {
+            if (!this.correctWords.has(wordId)) {
+                wordsToReset.push(wordId);
+            }
+        });
+        
+        // Remove placements for non-correct words
+        wordsToReset.forEach(wordId => {
+            delete this.placements[wordId];
+        });
+        
+        // Reset temporary image usage counts (only for current turn)
+        this.resetImageUsageCountsForNewTurn();
+        
+        // Re-render to show the reset state
+        this.renderWords();
+        this.updateImageCounts();
+        this.updateCarouselState();
+        
+        console.log(`🔄 Reset current turn ${this.currentTurn} - cleared ${wordsToReset.length} word placements`);
     }
     
     getSubmitButtonText() {
