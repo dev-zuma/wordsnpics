@@ -16,8 +16,17 @@ class WORDLINKSGame {
         this.wordTurns = {}; // Track which turn each word was solved in
         this.selectedBoardType = this.getBoardTypeFromURL();
         this.gameCompleted = false; // Track if game is completed
+        this.sessionId = this.generateSessionId(); // Unique session for progress tracking
         
         this.init();
+    }
+    
+    /**
+     * Generate unique session ID for game progress tracking
+     * Format: 'game_[timestamp]_[randomString]'
+     */
+    generateSessionId() {
+        return 'game_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
     
     getBoardTypeFromURL() {
@@ -37,9 +46,18 @@ class WORDLINKSGame {
             
             if (!hasCompleted) {
                 await this.loadPuzzle();
+                
+                // Try to load existing game progress
+                await this.loadGameProgress();
+                
                 this.setupCarousel();
                 this.setupEventListeners();
                 this.updateTurnBoxes();
+                
+                // Restore visual state after UI is fully set up
+                if (this.correctWords.size > 0) {
+                    this.restoreCorrectWordsVisualState();
+                }
             }
         }
     }
@@ -1097,6 +1115,197 @@ class WORDLINKSGame {
         console.log(`🔄 Reset current turn ${this.currentTurn} - cleared ${wordsToReset.length} word placements`);
     }
     
+    /**
+     * Save current game state to database for mid-game persistence
+     * Called after each turn validation
+     */
+    async saveGameProgress() {
+        if (!this.puzzleData?.boardId) {
+            return; // Can't save without board ID
+        }
+        
+        try {
+            const progressData = {
+                sessionId: this.sessionId,
+                boardId: this.puzzleData.boardId,
+                currentTurn: this.currentTurn,
+                correctWords: Array.from(this.correctWords),
+                wordTurns: this.wordTurns,
+                turnHistory: this.turnHistory,
+                currentPlacements: this.placements
+            };
+            
+            const response = await fetch('/api/game/save-progress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(progressData)
+            });
+            
+            if (response.ok) {
+                console.log(`💾 Game progress saved for session ${this.sessionId}, turn ${this.currentTurn}`);
+            } else {
+                console.warn('Failed to save game progress:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error saving game progress:', error);
+        }
+    }
+    
+    /**
+     * Load existing game progress from database on page load
+     * Restores game state if user has unfinished game for this board
+     */
+    async loadGameProgress() {
+        if (!this.puzzleData?.boardId) {
+            return; // Can't load without board ID
+        }
+        
+        try {
+            // First check if there's existing progress for this board
+            const response = await fetch(`/api/game/find-progress/${this.puzzleData.boardId}`);
+            
+            if (!response.ok) {
+                return; // No progress found or error
+            }
+            
+            const result = await response.json();
+            
+            if (result.success && result.progress) {
+                const progress = result.progress;
+                
+                // Restore game state from saved progress
+                this.sessionId = progress.session_id;
+                this.currentTurn = progress.current_turn;
+                this.correctWords = new Set(progress.correctWords);
+                this.wordTurns = progress.wordTurns;
+                this.turnHistory = progress.turnHistory;
+                this.placements = progress.currentPlacements;
+                
+                // Reset image usage counts based on current placements
+                this.resetImageUsageCountsForNewTurn();
+                
+                console.log(`🔄 Loaded game progress: session ${this.sessionId}, turn ${this.currentTurn}, ${this.correctWords.size}/20 correct`);
+                
+                // Show resume notification
+                this.showResumeNotification();
+            }
+        } catch (error) {
+            console.error('Error loading game progress:', error);
+        }
+    }
+    
+    /**
+     * Restore visual styling for correct words from previous turns
+     * Applies turn-specific colors and background images
+     */
+    restoreCorrectWordsVisualState() {
+        // Apply visual styling to words that were correct in previous turns
+        this.correctWords.forEach(wordId => {
+            const cell = document.querySelector(`[data-word-id="${wordId}"]`);
+            if (cell) {
+                // Get which turn this word was solved in
+                const turnSolved = this.wordTurns[wordId];
+                if (turnSolved) {
+                    // Remove any existing styling first
+                    cell.classList.remove('highlighted', 'turn-1', 'turn-2', 'turn-3', 'turn-4');
+                    // Add correct styling with turn-specific class
+                    cell.classList.add('correct', `turn-${turnSolved}`);
+                    
+                    // Restore background image if this word has a placement
+                    if (this.placements[wordId]) {
+                        cell.classList.add('has-image');
+                        const imageId = this.placements[wordId];
+                        const image = this.puzzleData.images.find(img => img.id === imageId);
+                        if (image) {
+                            cell.style.backgroundImage = `url(${image.url})`;
+                        }
+                    }
+                }
+            }
+        });
+        
+        console.log(`✅ Restored visual state for ${this.correctWords.size} correct words from previous turns`);
+    }
+    
+    showResumeNotification() {
+        // Create and show a temporary notification
+        const notification = document.createElement('div');
+        notification.className = 'resume-notification';
+        notification.innerHTML = `
+            <div class="resume-content">
+                <span>🔄 Resumed from Turn ${this.currentTurn}</span>
+                <span class="resume-details">${this.correctWords.size}/20 words solved</span>
+            </div>
+        `;
+        
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-family: 'Rubik', sans-serif;
+            animation: slideIn 0.3s ease-out;
+        `;
+        
+        // Add animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            .resume-content {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .resume-details {
+                font-size: 0.9em;
+                opacity: 0.8;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.transition = 'all 0.3s ease-out';
+            notification.style.transform = 'translateX(100%)';
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                notification.remove();
+                style.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    /**
+     * Clear saved game progress when game completes
+     * Called before redirecting to results page
+     */
+    async clearGameProgress() {
+        try {
+            const response = await fetch(`/api/game/clear-progress/${this.sessionId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                console.log(`🗑️ Cleared game progress for session ${this.sessionId}`);
+            }
+        } catch (error) {
+            console.error('Error clearing game progress:', error);
+        }
+    }
+    
     getSubmitButtonText() {
         if (this.currentTurn === 1) return 'TURN 1 CHECK';
         if (this.currentTurn === 2) return 'TURN 2 CHECK';
@@ -1161,6 +1370,9 @@ class WORDLINKSGame {
                 delete this.placements[wordId];
             });
             
+            // Save game progress after turn validation
+            await this.saveGameProgress();
+            
             // Check if game is complete before incrementing turn
             if (this.correctWords.size === 20) {
                 // All words correct - game won!
@@ -1179,6 +1391,9 @@ class WORDLINKSGame {
                 
                 // Reset image usage counts for new turn - only count permanently placed words
                 this.resetImageUsageCountsForNewTurn();
+                
+                // Save progress after incrementing turn for next turn
+                await this.saveGameProgress();
                 
                 // Reset button state with turn-specific text
                 solveBtn.textContent = this.getSubmitButtonText();
@@ -1278,7 +1493,7 @@ class WORDLINKSGame {
                 body: JSON.stringify({
                     boardId: this.puzzleData.boardId,
                     gameData: gameData,
-                    sessionId: this.generateSessionId()
+                    sessionId: this.sessionId
                 })
             });
             
@@ -1288,6 +1503,9 @@ class WORDLINKSGame {
             
             const finalScore = await response.json();
             // Game submitted successfully
+            
+            // Clear game progress since game is complete
+            await this.clearGameProgress();
             
             // Build URL parameters for results page using server-validated data
             const params = new URLSearchParams({
@@ -1300,7 +1518,7 @@ class WORDLINKSGame {
                 words: JSON.stringify(this.puzzleData.words),
                 wordTurns: JSON.stringify(finalScore.score.wordTurns),
                 boardId: this.puzzleData.boardId || '',
-                sessionId: finalScore.score.gameSessionId || this.generateSessionId(),
+                sessionId: finalScore.score.gameSessionId || this.sessionId,
                 validated: 'true' // Flag to indicate server validation
             });
             

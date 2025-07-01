@@ -65,6 +65,23 @@ CREATE TABLE IF NOT EXISTS game_sessions (
     turn_history TEXT
 );
 
+-- Game progress table for in-progress games
+CREATE TABLE IF NOT EXISTS game_progress (
+    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    profile_id TEXT REFERENCES profiles(id) ON DELETE CASCADE,
+    session_id TEXT UNIQUE NOT NULL,
+    board_id TEXT NOT NULL,
+    current_turn INTEGER NOT NULL DEFAULT 1,
+    correct_words TEXT, -- JSON array of correct word IDs
+    word_turns TEXT, -- JSON object mapping word IDs to turn numbers
+    turn_history TEXT, -- JSON array of completed turn results
+    current_placements TEXT, -- JSON object of current turn placements
+    start_time DATETIME NOT NULL,
+    last_saved DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (board_id) REFERENCES boards (id) ON DELETE CASCADE
+);
+
 -- Board types table
 CREATE TABLE IF NOT EXISTS board_types (
     id TEXT PRIMARY KEY,
@@ -221,6 +238,11 @@ CREATE INDEX IF NOT EXISTS idx_game_sessions_user_id ON game_sessions (user_id);
 CREATE INDEX IF NOT EXISTS idx_game_sessions_profile_id ON game_sessions(profile_id);
 CREATE INDEX IF NOT EXISTS idx_game_sessions_completed_at ON game_sessions (completed_at);
 CREATE INDEX IF NOT EXISTS idx_game_sessions_board_id ON game_sessions (board_id);
+
+CREATE INDEX IF NOT EXISTS idx_game_progress_session_id ON game_progress (session_id);
+CREATE INDEX IF NOT EXISTS idx_game_progress_user_id ON game_progress (user_id);
+CREATE INDEX IF NOT EXISTS idx_game_progress_profile_id ON game_progress (profile_id);
+CREATE INDEX IF NOT EXISTS idx_game_progress_board_id ON game_progress (board_id);
 
 CREATE INDEX IF NOT EXISTS idx_boards_type_id ON boards (board_type_id);
 CREATE INDEX IF NOT EXISTS idx_boards_published ON boards (is_published);

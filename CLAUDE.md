@@ -103,11 +103,97 @@ Turn indicators show incremental (not cumulative) correct counts:
 - T2: 8 (8 additional correct words)  
 - T3: 1 (1 additional correct word)
 
+## Game Progress Persistence
+
+### Overview
+Players can now resume games after page reload/browser restart. Progress is automatically saved after each turn and restored when returning to the same puzzle.
+
+### Database Schema
+**Table**: `game_progress`
+- `session_id`: Unique game session identifier
+- `board_id`: Links to specific puzzle board
+- `current_turn`: Turn number (1-4)
+- `correct_words`: JSON array of correctly matched word IDs
+- `word_turns`: JSON object mapping word IDs to turn solved
+- `turn_history`: JSON array of turn results
+- `current_placements`: JSON object of current word-image assignments
+- `user_id`/`profile_id`: Links to authenticated users (optional)
+
+### Implementation Flow
+1. **Game Start**: Generate unique session ID (`game_[timestamp]_[random]`)
+2. **Each Turn**: Auto-save progress after turn validation
+3. **Page Load**: Check for existing progress and restore game state
+4. **Resume**: Show notification and restore visual state
+5. **Game Complete**: Clear progress and redirect to results
+
+### Key Methods
+- `saveGameProgress()`: Save current state after each turn
+- `loadGameProgress()`: Load existing progress on initialization  
+- `restoreCorrectWordsVisualState()`: Restore visual styling and background images
+- `clearGameProgress()`: Clean up when game completes
+
+### API Endpoints
+- `POST /api/game/save-progress`: Save game state
+- `GET /api/game/find-progress/:boardId`: Find existing progress
+- `DELETE /api/game/clear-progress/:sessionId`: Clear completed game
+
+## AWS S3 Image Storage
+
+### Overview
+Images are stored in AWS S3 for persistent cloud storage, preventing loss during deployments on ephemeral filesystems (like Render.com).
+
+### Configuration
+**Environment Variables** (in `.env`):
+```env
+AWS_S3_BUCKET_NAME=wordsnpics-images-dev
+AWS_REGION=us-east-2
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+```
+
+**Buckets**:
+- **Development**: `wordsnpics-images-dev`
+- **Production**: `wordsnpics-images-prod`
+
+### Implementation
+**Service**: `/services/s3-service.js`
+- Handles image uploads to S3 with local filesystem fallback
+- Returns public HTTPS URLs for uploaded images
+- Automatic retry logic and error handling
+
+**Usage in Puzzle Generation**:
+```javascript
+const imageBuffer = Buffer.from(imageB64, "base64");
+const fileName = `daily-${group.id}-${Date.now()}.png`;
+const imageUrl = await this.s3Service.uploadImage(imageBuffer, fileName);
+```
+
+### CORS Configuration
+**Issue**: Canvas image loading blocked by CORS when loading S3 images for shareable graphics.
+
+**Solutions Implemented**:
+1. **S3 CORS Policy**: Applied to bucket in AWS Console
+2. **Image Proxy Endpoint**: `/api/image-proxy` for CORS bypass
+3. **Dual Loading Strategy**: Direct S3 load with proxy fallback
+
+**Image Proxy Usage**:
+```javascript
+img.onerror = () => {
+    if (!img.src.includes('/api/image-proxy')) {
+        const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(image.url)}`;
+        img.src = proxyUrl;
+        return;
+    }
+    // Gradient fallback if both fail
+};
+```
+
 ### File Organization
 - Keep game logic in `game.js`
 - UI styling in `styles.css`
 - Server logic in `server.js` and `routes/`
-- Puzzle data in `data/` directory
+- **S3 service**: `/services/s3-service.js`
+- **Image generation**: `/services/puzzle-generation.js`
 
 ## Known Issues
 
@@ -132,6 +218,37 @@ LEFT JOIN shareable_graphics sg ON (
     (sg.user_id = gs.user_id AND sg.board_id = gs.board_id AND DATE(sg.created_at) = DATE(gs.completed_at))
 )
 ```
+
+## Database Migrations
+
+### Windows/WSL Database Path Issues
+**Important**: When developing locally on Windows with WSL, there can be path conflicts between Windows Command Prompt and WSL environments.
+
+**Issue**: Running server from Windows Command Prompt but applying migrations from WSL can result in separate database files.
+
+**Solution**: Always run migrations from the same environment as your server:
+- If server runs from Windows Command Prompt: `node migration_script.js` from Windows
+- If server runs from WSL: Run migrations from WSL
+
+**Example Migration Script**:
+```javascript
+const dbService = require('./database/wordsnpics-db');
+
+async function applyMigration() {
+  await dbService.initialize();
+  
+  // Create new table
+  dbService.db.run(`CREATE TABLE new_table (...)`);
+  
+  // Save to ensure persistence
+  await dbService.saveDatabase();
+}
+```
+
+### Game Progress Table
+The `game_progress` table was added via migration to support mid-game persistence. If missing, it can be recreated by:
+1. Running a migration script from the same environment as the server
+2. Ensuring the database file is properly saved after schema changes
 
 ## Port Configuration
 - Port 5000 is used (avoiding 3000 and 4000 which are used by other projects)

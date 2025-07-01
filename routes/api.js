@@ -957,4 +957,107 @@ router.get('/profile-graphics/:profileId', async (req, res) => {
   }
 });
 
+// Game progress endpoints for mid-game state persistence
+
+// Save game progress after each turn
+router.post('/game/save-progress', async (req, res) => {
+  try {
+    const { sessionId, boardId, currentTurn, correctWords, wordTurns, turnHistory, currentPlacements } = req.body;
+    
+    if (!sessionId || !boardId || !currentTurn) {
+      return res.status(400).json({ error: 'Missing required fields: sessionId, boardId, currentTurn' });
+    }
+    
+    const progressData = {
+      userId: req.isAuthenticated() ? req.user.id : null,
+      profileId: req.session.activeProfile ? req.session.activeProfile.id : null,
+      sessionId,
+      boardId,
+      currentTurn,
+      correctWords: correctWords || [],
+      wordTurns: wordTurns || {},
+      turnHistory: turnHistory || [],
+      currentPlacements: currentPlacements || {},
+      startTime: new Date().toISOString()
+    };
+    
+    await dbService.saveGameProgress(progressData);
+    
+    res.json({
+      success: true,
+      message: `Game progress saved for turn ${currentTurn}`
+    });
+    
+  } catch (error) {
+    console.error('Error saving game progress:', error);
+    res.status(500).json({ error: 'Failed to save game progress' });
+  }
+});
+
+// Load saved game progress
+router.get('/game/load-progress/:sessionId', async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    
+    const progress = await dbService.loadGameProgress(sessionId);
+    
+    if (!progress) {
+      return res.status(404).json({ error: 'No saved progress found' });
+    }
+    
+    res.json({
+      success: true,
+      progress: progress
+    });
+    
+  } catch (error) {
+    console.error('Error loading game progress:', error);
+    res.status(500).json({ error: 'Failed to load game progress' });
+  }
+});
+
+// Find existing progress for user/board combination
+router.get('/game/find-progress/:boardId', async (req, res) => {
+  try {
+    const { boardId } = req.params;
+    
+    if (!req.isAuthenticated() || !req.session.activeProfile) {
+      return res.json({ success: true, progress: null });
+    }
+    
+    const userId = req.user.id;
+    const profileId = req.session.activeProfile.id;
+    
+    const progress = await dbService.findGameProgressByUser(userId, profileId, boardId);
+    
+    res.json({
+      success: true,
+      progress: progress
+    });
+    
+  } catch (error) {
+    console.error('Error finding game progress:', error);
+    res.status(500).json({ error: 'Failed to find game progress' });
+  }
+});
+
+// Clear game progress (called when game completes)
+router.delete('/game/clear-progress/:sessionId', async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    
+    const cleared = await dbService.clearGameProgress(sessionId);
+    
+    res.json({
+      success: true,
+      cleared: cleared,
+      message: cleared ? 'Progress cleared' : 'No progress found to clear'
+    });
+    
+  } catch (error) {
+    console.error('Error clearing game progress:', error);
+    res.status(500).json({ error: 'Failed to clear game progress' });
+  }
+});
+
 module.exports = router;

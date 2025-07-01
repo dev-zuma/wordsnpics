@@ -348,6 +348,158 @@ class WordsnpicsDatabaseService {
         }
     }
 
+    // Game progress methods for mid-game state persistence
+    
+    /**
+     * Save or update game progress in database
+     * Allows players to resume games after page reload
+     */
+    async saveGameProgress(progressData) {
+        const {
+            userId, profileId, sessionId, boardId, currentTurn,
+            correctWords, wordTurns, turnHistory, currentPlacements, startTime
+        } = progressData;
+
+        try {
+            // Check if progress already exists
+            const checkStmt = this.db.prepare('SELECT id FROM game_progress WHERE session_id = ?');
+            checkStmt.bind([sessionId]);
+            const existing = checkStmt.step() ? checkStmt.getAsObject() : null;
+            checkStmt.free();
+            
+            if (existing) {
+                // Update existing progress
+                const updateStmt = this.db.prepare(`
+                    UPDATE game_progress 
+                    SET current_turn = ?, correct_words = ?, word_turns = ?, 
+                        turn_history = ?, current_placements = ?, last_saved = CURRENT_TIMESTAMP
+                    WHERE session_id = ?
+                `);
+                
+                updateStmt.run([
+                    currentTurn,
+                    JSON.stringify(correctWords),
+                    JSON.stringify(wordTurns),
+                    JSON.stringify(turnHistory),
+                    JSON.stringify(currentPlacements),
+                    sessionId
+                ]);
+                updateStmt.free();
+            } else {
+                // Insert new progress record
+                const insertStmt = this.db.prepare(`
+                    INSERT INTO game_progress (
+                        user_id, profile_id, session_id, board_id, current_turn,
+                        correct_words, word_turns, turn_history, current_placements, start_time
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `);
+                
+                insertStmt.run([
+                    userId, profileId, sessionId, boardId, currentTurn,
+                    JSON.stringify(correctWords),
+                    JSON.stringify(wordTurns),
+                    JSON.stringify(turnHistory),
+                    JSON.stringify(currentPlacements),
+                    startTime
+                ]);
+                insertStmt.free();
+            }
+            
+            await this.saveDatabase();
+            console.log(`💾 Game progress saved for session ${sessionId}, turn ${currentTurn}`);
+            return true;
+        } catch (error) {
+            console.error('Error saving game progress:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Load saved game progress by session ID
+     */
+    async loadGameProgress(sessionId) {
+        try {
+            const stmt = this.db.prepare('SELECT * FROM game_progress WHERE session_id = ?');
+            stmt.bind([sessionId]);
+            const result = stmt.step() ? stmt.getAsObject() : null;
+            stmt.free();
+            
+            if (result) {
+                // Parse JSON fields
+                return {
+                    ...result,
+                    correctWords: result.correct_words ? JSON.parse(result.correct_words) : [],
+                    wordTurns: result.word_turns ? JSON.parse(result.word_turns) : {},
+                    turnHistory: result.turn_history ? JSON.parse(result.turn_history) : [],
+                    currentPlacements: result.current_placements ? JSON.parse(result.current_placements) : {}
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error loading game progress:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Delete game progress when game completes
+     */
+    async clearGameProgress(sessionId) {
+        try {
+            // Check if record exists first
+            const checkStmt = this.db.prepare('SELECT id FROM game_progress WHERE session_id = ?');
+            checkStmt.bind([sessionId]);
+            const exists = checkStmt.step() ? checkStmt.getAsObject() : null;
+            checkStmt.free();
+            
+            if (exists) {
+                const stmt = this.db.prepare('DELETE FROM game_progress WHERE session_id = ?');
+                stmt.run([sessionId]);
+                stmt.free();
+                
+                await this.saveDatabase();
+                console.log(`🗑️ Cleared game progress for session ${sessionId}`);
+                return true;
+            }
+            
+            return false;
+        } catch (error) {
+            console.error('Error clearing game progress:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Find existing game progress for a user on specific board
+     */
+    async findGameProgressByUser(userId, profileId, boardId) {
+        try {
+            const stmt = this.db.prepare(`
+                SELECT * FROM game_progress 
+                WHERE user_id = ? AND profile_id = ? AND board_id = ?
+                ORDER BY last_saved DESC
+                LIMIT 1
+            `);
+            stmt.bind([userId, profileId, boardId]);
+            const result = stmt.step() ? stmt.getAsObject() : null;
+            stmt.free();
+            
+            if (result) {
+                return {
+                    ...result,
+                    correctWords: result.correct_words ? JSON.parse(result.correct_words) : [],
+                    wordTurns: result.word_turns ? JSON.parse(result.word_turns) : {},
+                    turnHistory: result.turn_history ? JSON.parse(result.turn_history) : [],
+                    currentPlacements: result.current_placements ? JSON.parse(result.current_placements) : {}
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error finding game progress by user:', error);
+            throw error;
+        }
+    }
+
     async updateProfileStats(profileId, gameData) {
         try {
             const { correctWords, isWin, timeElapsed, turnsUsed } = gameData;
