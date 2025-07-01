@@ -1,6 +1,7 @@
 const OpenAI = require('openai');
 const fs = require('fs').promises;
 const path = require('path');
+const S3Service = require('./s3-service');
 
 class PuzzleGenerationService {
     constructor(dbService) {
@@ -8,6 +9,7 @@ class PuzzleGenerationService {
         this.openai = null;
         this.isGenerating = false;
         this.generationQueue = [];
+        this.s3Service = new S3Service();
     }
 
     // Initialize OpenAI client
@@ -475,18 +477,14 @@ VALIDATION CHECKLIST before submitting:
 
         if (response.data[0] && response.data[0].b64_json) {
             const imageB64 = response.data[0].b64_json;
+            const imageBuffer = Buffer.from(imageB64, "base64");
             const fileName = `daily-${group.id}-${Date.now()}.png`;
-            const filePath = path.join(__dirname, '..', 'public', 'images', 'generated', fileName);
             
-            // Ensure directory exists
-            const generatedDir = path.join(__dirname, '..', 'public', 'images', 'generated');
-            await fs.mkdir(generatedDir, { recursive: true });
+            // Upload to S3 or local storage
+            const imageUrl = await this.s3Service.uploadImage(imageBuffer, fileName);
+            console.log(`🎨 Image uploaded: ${imageUrl}`);
             
-            // Save image
-            await fs.writeFile(filePath, Buffer.from(imageB64, "base64"));
-            console.log(`💾 Saved image: /images/generated/${fileName}`);
-            
-            return `/images/generated/${fileName}`;
+            return imageUrl;
         } else {
             throw new Error('Failed to generate image - no data received from DALL-E');
         }
