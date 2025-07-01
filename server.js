@@ -41,11 +41,12 @@ async function startServer() {
             console.error('🔧 Database corruption can often be fixed by cleaning recent game data');
             console.error('');
             console.error('🛠️  Recovery options (try in order):');
-            console.error('   1. Clean recent games: node scripts/clean-recent-games.js');
-            console.error('   2. Full data recovery: node scripts/fix-database-corruption.js');
-            console.error('   3. Fresh database: node scripts/reset-production-db.js');
+            console.error('   1. Clean problematic boards: node scripts/clean-board-generation.js');
+            console.error('   2. Clean recent games: node scripts/clean-recent-games.js');
+            console.error('   3. Full data recovery: node scripts/fix-database-corruption.js');
+            console.error('   4. Fresh database: node scripts/reset-production-db.js');
             console.error('');
-            console.error('💡 Option 1 preserves user data, Option 2 attempts data recovery, Option 3 starts fresh');
+            console.error('💡 Option 1 removes failed board generation, Option 2 cleans game data, Option 3 attempts full recovery, Option 4 starts fresh');
             console.error('');
             process.exit(1);
         } else {
