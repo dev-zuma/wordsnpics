@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init-db": "node scripts/init-database.js"
+    "init-db": "node scripts/init-database.js",
+    "migrate-prod": "NODE_ENV=production node migrate_production_db.js"
   },
   "keywords": [
     "word-game",
