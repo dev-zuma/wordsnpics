@@ -54,8 +54,8 @@ temp/
 debug.js
 test-server.js
 
-# Database files - exclude all for fresh production deployment
-database/*.db
+# Database files - exclude temporary files but INCLUDE main database for production
+# database/*.db  # Temporarily commented out to include initialized database
 database/*.db-*
 database/*.db-journal
 database/*.db-wal

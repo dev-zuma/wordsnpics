@@ -6,8 +6,17 @@ class WordsnpicsDatabaseService {
     constructor() {
         this.db = null;
         this.SQL = null;
-        // Use /tmp directory in production (Render) for write permissions
-        const dbDir = process.env.NODE_ENV === 'production' ? '/tmp' : __dirname;
+        // Check for Render persistent disk first, then fallback to tmp or local
+        let dbDir = __dirname;
+        if (process.env.NODE_ENV === 'production') {
+            // Render persistent disk mount point (if configured)
+            if (process.env.RENDER_DISK_MOUNT_PATH) {
+                dbDir = process.env.RENDER_DISK_MOUNT_PATH;
+            } else {
+                // Fallback to tmp for initial setup
+                dbDir = '/tmp';
+            }
+        }
         this.dbPath = path.join(dbDir, 'wordsnpics.db');
         console.log('Database path:', this.dbPath);
     }
