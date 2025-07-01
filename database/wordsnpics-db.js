@@ -821,6 +821,87 @@ class WordsnpicsDatabaseService {
         }
     }
 
+    // Check if user has completed today's puzzle for a specific board type
+    async hasUserCompletedTodaysPuzzle(userId, profileId, boardType) {
+        try {
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            
+            const stmt = this.db.prepare(`
+                SELECT gs.*, b.board_type_id, b.title as puzzle_title
+                FROM game_sessions gs
+                JOIN boards b ON gs.board_id = b.id
+                WHERE (gs.user_id = ? OR gs.profile_id = ?)
+                AND b.board_type_id = ?
+                AND b.is_daily = 1
+                AND DATE(gs.completed_at) = ?
+                ORDER BY gs.completed_at DESC
+                LIMIT 1
+            `);
+            
+            stmt.bind([userId, profileId, boardType, today]);
+            const result = stmt.step() ? stmt.getAsObject() : null;
+            stmt.free();
+            
+            if (result) {
+                // Parse JSON fields
+                const wordTurns = result.word_turns ? JSON.parse(result.word_turns) : {};
+                const turnHistory = result.turn_history ? JSON.parse(result.turn_history) : [];
+                
+                return {
+                    hasCompleted: true,
+                    gameSession: {
+                        id: result.id,
+                        sessionId: result.session_id,
+                        boardId: result.board_id,
+                        puzzleTitle: result.puzzle_title,
+                        correctWords: result.correct_words,
+                        totalWords: result.total_words,
+                        turnsUsed: result.turns_used,
+                        timeElapsed: result.time_elapsed,
+                        isWin: result.is_win,
+                        completedAt: result.completed_at,
+                        wordTurns: wordTurns,
+                        turnHistory: turnHistory
+                    }
+                };
+            }
+            
+            return { hasCompleted: false, gameSession: null };
+            
+        } catch (error) {
+            console.error('Error checking user completion status:', error);
+            throw error;
+        }
+    }
+
+    // Get completion status for all board types for a user
+    async getUserDailyCompletionStatus(userId, profileId) {
+        try {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Get all board types
+            const boardTypes = await this.getBoardTypes();
+            const completionStatus = {};
+            
+            // Check completion for each board type
+            for (const boardType of boardTypes) {
+                if (boardType.is_active) {
+                    const completion = await this.hasUserCompletedTodaysPuzzle(userId, profileId, boardType.id);
+                    completionStatus[boardType.id] = {
+                        boardType: boardType,
+                        ...completion
+                    };
+                }
+            }
+            
+            return completionStatus;
+            
+        } catch (error) {
+            console.error('Error getting user daily completion status:', error);
+            throw error;
+        }
+    }
+
     // Close database connection
     async close() {
         if (this.db) {

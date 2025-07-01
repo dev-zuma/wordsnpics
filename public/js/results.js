@@ -206,10 +206,7 @@ class ResultsPage {
             }
             
             if (user) {
-                // User is signed in - show game history in auth section and user info in header
-                if (authSection) {
-                    await this.renderUserHistory(authSection, user, activeProfile);
-                }
+                // User is signed in - show user info in header and recent games
                 if (userSection && window.authManager) {
                     window.authManager.renderUserSection();
                 }

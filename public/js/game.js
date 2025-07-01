@@ -27,10 +27,21 @@ class WORDLINKSGame {
     
     async init() {
         await this.loadBoardTypes();
-        await this.loadPuzzle();
-        this.setupCarousel();
-        this.setupEventListeners();
-        this.updateTurnBoxes();
+        
+        // Check if user wants to see board selection or play specific game
+        if (!this.selectedBoardType || this.selectedBoardType === 'select') {
+            await this.showBoardSelection();
+        } else {
+            // Check if user has already completed today's puzzle
+            const hasCompleted = await this.checkCompletionAndShowOverlay();
+            
+            if (!hasCompleted) {
+                await this.loadPuzzle();
+                this.setupCarousel();
+                this.setupEventListeners();
+                this.updateTurnBoxes();
+            }
+        }
     }
     
     async loadBoardTypes() {
@@ -68,6 +79,141 @@ class WORDLINKSGame {
             });
         } catch (error) {
             console.error('Failed to load board types:', error);
+        }
+    }
+    
+    async showBoardSelection() {
+        try {
+            // Hide game interface, show board selection
+            document.getElementById('gameInterface').style.display = 'none';
+            document.getElementById('boardSelectionContainer').style.display = 'block';
+            
+            // Load board types and completion status
+            const [boardTypesResponse, dailyStatusResponse] = await Promise.all([
+                fetch('/api/board-types'),
+                fetch('/api/daily-status')
+            ]);
+            
+            const boardTypes = await boardTypesResponse.json();
+            const dailyStatus = await dailyStatusResponse.json();
+            
+            this.renderBoardCards(boardTypes, dailyStatus);
+            
+        } catch (error) {
+            console.error('Error showing board selection:', error);
+            // Fallback to regular game if board selection fails
+            await this.loadPuzzle();
+            this.setupCarousel();
+            this.setupEventListeners();
+            this.updateTurnBoxes();
+        }
+    }
+    
+    renderBoardCards(boardTypes, dailyStatus) {
+        const boardGrid = document.getElementById('boardGrid');
+        
+        const boardCards = boardTypes.map(boardType => {
+            const completion = dailyStatus.completionStatus[boardType.id] || { hasCompleted: false };
+            const isAuthenticated = dailyStatus.userAuthenticated;
+            
+            let statusBadge, statusContent = '';
+            
+            if (completion.hasCompleted) {
+                statusBadge = `<span class="board-status-badge completed">Completed</span>`;
+                statusContent = `
+                    <span class="board-score">${completion.gameSession.correctWords}/${completion.gameSession.totalWords} words</span>
+                    <div class="board-status-right">
+                        <button class="view-results-btn" onclick="viewGameResults('${completion.gameSession.sessionId}')">View Results</button>
+                    </div>
+                `;
+            } else {
+                statusBadge = `<span class="board-status-badge available">Available</span>`;
+                statusContent = `<div class="board-status-right"></div>`;
+            }
+            
+            const cardClass = completion.hasCompleted ? 'board-card completed' : 'board-card';
+            const clickHandler = completion.hasCompleted ? '' : `onclick="selectBoard('${boardType.id}')"`;
+            
+            return `
+                <div class="${cardClass}" ${clickHandler}>
+                    <div class="board-card-content">
+                        <div class="board-card-header">
+                            <span class="board-card-icon">${boardType.icon}</span>
+                            <span class="board-card-title">${boardType.name}</span>
+                        </div>
+                        <div class="board-card-description">${boardType.description}</div>
+                        <div class="board-card-status">
+                            <div class="board-status-left">
+                                ${statusBadge}
+                                ${statusContent}
+                            </div>
+                        </div>
+                        ${completion.hasCompleted ? this.generateCountdownText() : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        boardGrid.innerHTML = boardCards;
+    }
+    
+    generateCountdownText() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T12:00:00.000Z`);
+        
+        const timeUntilNext = tomorrowRelease.getTime() - now.getTime();
+        const hours = Math.floor(timeUntilNext / (1000 * 60 * 60));
+        const minutes = Math.floor((timeUntilNext % (1000 * 60 * 60)) / (1000 * 60));
+        
+        return `<div class="countdown-text">Next puzzle in ${hours}h ${minutes}m</div>`;
+    }
+    
+    startLiveCountdown(elementId) {
+        const updateCountdown = () => {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T12:00:00.000Z`);
+            
+            const timeUntilNext = tomorrowRelease.getTime() - now.getTime();
+            
+            if (timeUntilNext <= 0) {
+                // Time's up, refresh the page
+                window.location.reload();
+                return;
+            }
+            
+            const hours = Math.floor(timeUntilNext / (1000 * 60 * 60));
+            const minutes = Math.floor((timeUntilNext % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeUntilNext % (1000 * 60)) / 1000);
+            
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = `Next puzzle in ${hours}h ${minutes}m ${seconds}s`;
+            }
+        };
+        
+        // Update immediately
+        updateCountdown();
+        
+        // Update every second
+        const interval = setInterval(updateCountdown, 1000);
+        
+        // Store interval for cleanup
+        if (!this.countdownIntervals) {
+            this.countdownIntervals = [];
+        }
+        this.countdownIntervals.push(interval);
+        
+        return interval;
+    }
+    
+    clearCountdownIntervals() {
+        if (this.countdownIntervals) {
+            this.countdownIntervals.forEach(interval => clearInterval(interval));
+            this.countdownIntervals = [];
         }
     }
     
@@ -1164,7 +1310,82 @@ class WORDLINKSGame {
         return localStorage.getItem('wordlinks_session');
     }
     
+    // Check if user has completed today's puzzle for current board type
+    async checkCompletionAndShowOverlay() {
+        if (!this.selectedBoardType || this.selectedBoardType === 'demo') {
+            return false; // No completion check for demo mode
+        }
+        
+        try {
+            const response = await fetch(`/api/daily-status/${this.selectedBoardType}`);
+            const status = await response.json();
+            
+            if (status.hasCompleted) {
+                this.showCompletionOverlay(status.gameSession);
+                return true;
+            }
+            
+            return false;
+        } catch (error) {
+            console.error('Error checking completion status:', error);
+            return false;
+        }
+    }
+    
+    showCompletionOverlay(gameSession) {
+        const countdownId = `live-countdown-${Date.now()}`;
+        const overlay = document.createElement('div');
+        overlay.className = 'completion-overlay';
+        overlay.innerHTML = `
+            <div class="completion-content">
+                <div class="completion-icon">✅</div>
+                <h2>Puzzle Already Completed!</h2>
+                <div class="completion-score">
+                    Score: ${gameSession.correctWords}/${gameSession.totalWords} words
+                </div>
+                <div class="completion-time">
+                    Time: ${gameSession.timeElapsed}
+                </div>
+                <div class="completion-actions">
+                    <button onclick="viewGameResults('${gameSession.sessionId}')" class="view-results-button">
+                        View Results
+                    </button>
+                    <button onclick="selectBoard('select')" class="choose-another-button">
+                        Choose Another Board
+                    </button>
+                </div>
+                <div class="next-puzzle-info">
+                    <div id="${countdownId}">Next puzzle in calculating...</div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Start live countdown
+        this.startLiveCountdown(countdownId);
+    }
+    
 }
+
+// Global functions for board selection interface
+window.selectBoard = function(boardType) {
+    window.location.href = `/?boardType=${boardType}`;
+};
+
+window.viewGameResults = async function(sessionId) {
+    try {
+        const response = await fetch(`/api/game/session/${sessionId}/results-url`);
+        const data = await response.json();
+        if (data.resultsUrl) {
+            window.location.href = data.resultsUrl;
+        } else {
+            console.error('No results URL returned');
+        }
+    } catch (error) {
+        console.error('Error getting results URL:', error);
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     window.gameInstance = new WORDLINKSGame();

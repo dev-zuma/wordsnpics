@@ -40,7 +40,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="/css/styles.css?v=2.8">
+    <link rel="stylesheet" href="/css/styles.css?v=2.9">
 </head>
 <body>
     <div class="game-container">
@@ -68,6 +68,19 @@
         </header>
 
         <main>
+            <!-- Board Selection Interface -->
+            <div class="board-selection-container" id="boardSelectionContainer" style="display: none;">
+                <div class="board-selection-header">
+                    <h2>Choose Today's Puzzle</h2>
+                    <p>Select a board to play today's daily puzzle</p>
+                </div>
+                <div class="board-grid" id="boardGrid">
+                    <!-- Board cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Game Interface -->
+            <div class="game-interface" id="gameInterface">
             <div class="carousel-container" id="carouselContainer">
                 <button class="carousel-nav carousel-nav-prev" id="carouselPrev">‹</button>
                 <div class="carousel-wrapper">
@@ -99,6 +112,7 @@
                     <button id="solveBtn" class="solve-btn">SUBMIT</button>
                     <button id="resetBtn" class="reset-btn">🔄</button>
                 </div>
+            </div>
             </div>
         </main>
 
@@ -173,6 +187,6 @@
     </div>
 
     <script src="/js/auth.js"></script>
-    <script src="/js/game.js?v=4.6"></script>
+    <script src="/js/game.js?v=4.8"></script>
 </body>
 </html>

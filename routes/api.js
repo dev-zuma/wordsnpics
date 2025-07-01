@@ -567,8 +567,8 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
       return res.status(404).json({ error: 'Board content not found' });
     }
     
-    // Check if this puzzle should be released yet (6 AM UTC)
-    const releaseTime = new Date(`${currentDate}T06:00:00.000Z`);
+    // Check if this puzzle should be released yet (12 PM UTC)
+    const releaseTime = new Date(`${currentDate}T12:00:00.000Z`);
     const now = new Date();
     
     if (now < releaseTime) {
@@ -577,7 +577,7 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
         available: false,
         releaseTime: releaseTime.toISOString(),
         timeUntilRelease: timeUntilRelease,
-        message: 'Today\'s puzzle will be available at 6:00 AM UTC',
+        message: 'Today\'s puzzle will be available at 12:00 PM UTC',
         boardType: boardType
       });
     }
@@ -678,20 +678,20 @@ router.get('/puzzle-timing', async (req, res) => {
   try {
     const now = new Date();
     const today = now.toISOString().split('T')[0];
-    const todayRelease = new Date(`${today}T06:00:00.000Z`);
+    const todayRelease = new Date(`${today}T12:00:00.000Z`);
     
     // Calculate next release
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowDate = tomorrow.toISOString().split('T')[0];
-    const nextRelease = new Date(`${tomorrowDate}T06:00:00.000Z`);
+    const nextRelease = new Date(`${tomorrowDate}T12:00:00.000Z`);
     
     const currentPuzzleAvailable = now >= todayRelease;
     
     res.json({
       serverTime: now.toISOString(),
       timezone: 'UTC',
-      releaseHour: 6,
+      releaseHour: 12,
       today: {
         date: today,
         releaseTime: todayRelease.toISOString(),
@@ -833,6 +833,66 @@ router.get('/game/session/:sessionId/results-url', async (req, res) => {
   } catch (error) {
     console.error('Error generating results URL:', error);
     res.status(500).json({ error: 'Failed to generate results URL' });
+  }
+});
+
+// Get daily completion status for a specific board type
+router.get('/daily-status/:boardType', async (req, res) => {
+  try {
+    const { boardType } = req.params;
+    
+    // Check if user is authenticated
+    if (!req.isAuthenticated() || !req.session.activeProfile) {
+      return res.json({
+        hasCompleted: false,
+        gameSession: null,
+        userAuthenticated: false
+      });
+    }
+    
+    const userId = req.user.id;
+    const profileId = req.session.activeProfile.id;
+    
+    // Check completion status for this board type
+    const completion = await dbService.hasUserCompletedTodaysPuzzle(userId, profileId, boardType);
+    
+    res.json({
+      ...completion,
+      userAuthenticated: true,
+      boardType: boardType
+    });
+    
+  } catch (error) {
+    console.error('Error getting daily status:', error);
+    res.status(500).json({ error: 'Failed to get daily status' });
+  }
+});
+
+// Get daily completion status for all board types
+router.get('/daily-status', async (req, res) => {
+  try {
+    // Check if user is authenticated
+    if (!req.isAuthenticated() || !req.session.activeProfile) {
+      return res.json({
+        userAuthenticated: false,
+        completionStatus: {}
+      });
+    }
+    
+    const userId = req.user.id;
+    const profileId = req.session.activeProfile.id;
+    
+    // Get completion status for all board types
+    const completionStatus = await dbService.getUserDailyCompletionStatus(userId, profileId);
+    
+    res.json({
+      userAuthenticated: true,
+      completionStatus: completionStatus
+    });
+    
+  } catch (error) {
+    console.error('Error getting daily completion status:', error);
+    res.status(500).json({ error: 'Failed to get daily completion status' });
   }
 });
 

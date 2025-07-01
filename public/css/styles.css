@@ -1737,3 +1737,316 @@ main {
 .game-completed .carousel-nav {
     pointer-events: none !important;
 }
+
+/* Board Selection Interface */
+.board-selection-container {
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.board-selection-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.board-selection-header h2 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.board-selection-header p {
+    color: var(--shadow);
+    font-size: 0.9rem;
+}
+
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    max-width: 100%;
+}
+
+.board-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid #e8e8e8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.board-card:hover {
+    border-color: var(--secondary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.board-card.completed {
+    position: relative;
+    opacity: 0.9;
+    cursor: default;
+}
+
+.board-card.completed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(128, 128, 128, 0.25);
+    border-radius: 16px;
+    z-index: 1;
+}
+
+.board-card.completed .board-card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.board-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.board-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.board-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+    flex: 1;
+}
+
+.board-card-description {
+    color: var(--shadow);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.board-card-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.board-status-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.board-status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.board-status-badge.available {
+    background: #e8f5e8;
+    color: var(--success);
+}
+
+.board-status-badge.completed {
+    background: #f0f0f0;
+    color: var(--shadow);
+}
+
+.board-status-badge.countdown {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.board-score {
+    font-size: 0.8rem;
+    color: var(--shadow);
+    margin-left: 0.5rem;
+}
+
+.board-status-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-results-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--secondary);
+    color: var(--primary);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-results-btn:hover {
+    background: var(--highlight);
+    color: white;
+}
+
+.countdown-text {
+    font-size: 0.75rem;
+    color: var(--shadow);
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* Completion Overlay Styles */
+.completion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.completion-content {
+    background: var(--bg-light);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.completion-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.completion-content h2 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.completion-score {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.completion-time {
+    font-size: 1rem;
+    color: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.completion-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.view-results-button,
+.choose-another-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 120px;
+}
+
+.view-results-button {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.view-results-button:hover {
+    background: var(--highlight);
+    color: white;
+}
+
+.choose-another-button {
+    background: var(--soft-bg);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.choose-another-button:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.next-puzzle-info {
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    color: var(--shadow);
+    font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .board-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .board-selection-container {
+        padding: 1rem;
+    }
+    
+    .board-card {
+        padding: 1rem;
+    }
+    
+    .completion-content {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .completion-actions {
+        flex-direction: column;
+    }
+    
+    .view-results-button,
+    .choose-another-button {
+        flex: none;
+        width: 100%;
+    }
+}
