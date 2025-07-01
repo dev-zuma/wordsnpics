@@ -188,26 +188,30 @@ class ResultsPage {
         const userSection = document.getElementById('userSection');
         
         try {
-            // Check if user is authenticated by accessing the auth manager
-            const user = window.authManager ? window.authManager.getCurrentUser() : null;
+            // Check authentication status by fetching from server directly
+            let user = null;
+            let activeProfile = null;
             
-            // Get active profile from auth manager or fetch from server
-            let activeProfile = window.authManager ? window.authManager.activeProfile : null;
-            
-            // If no active profile from auth manager, fetch from server
-            if (user && !activeProfile) {
-                try {
-                    const statusResponse = await fetch('/auth/status');
-                    const statusData = await statusResponse.json();
+            try {
+                const statusResponse = await fetch('/auth/status');
+                const statusData = await statusResponse.json();
+                if (statusData.authenticated) {
+                    user = statusData.user;
                     activeProfile = statusData.activeProfile;
-                } catch (fetchError) {
-                    console.error('Error fetching active profile:', fetchError);
                 }
+            } catch (fetchError) {
+                console.error('Error fetching auth status:', fetchError);
+                // Fallback to auth manager if available
+                user = window.authManager ? window.authManager.getCurrentUser() : null;
+                activeProfile = window.authManager ? window.authManager.activeProfile : null;
             }
+            
+            console.log('Auth check result:', { user: !!user, activeProfile: !!activeProfile });
             
             if (user) {
                 // User is signed in - hide auth section and show recent games
                 if (authSection) {
+                    console.log('Hiding auth section for logged-in user');
                     authSection.style.display = 'none';
                 }
                 if (userSection && window.authManager) {
@@ -217,7 +221,9 @@ class ResultsPage {
                 await this.renderRecentGames(user, activeProfile);
             } else {
                 // User is not signed in - show call to action and login button
+                console.log('Showing auth section for non-logged-in user');
                 if (authSection) {
+                    authSection.style.display = 'block';
                     this.renderSignUpCTA(authSection);
                 }
                 if (userSection && window.authManager) {
@@ -589,7 +595,10 @@ class ResultsPage {
         
         container.innerHTML = groups.map(group => `
             <div class="explanation-group">
-                <div class="explanation-header">${group.theme} (${group.words.length} words)</div>
+                <div class="explanation-header">
+                    ${group.url ? `<img src="${group.url}" alt="${group.theme}" class="explanation-image">` : ''}
+                    <div class="explanation-title">${group.theme} (${group.words.length} words)</div>
+                </div>
                 <div class="explanation-description">${group.narrative || 'No explanation available for this group.'}</div>
                 <div class="explanation-words">
                     ${group.words.map(word => `

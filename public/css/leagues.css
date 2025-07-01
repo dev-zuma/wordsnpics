@@ -1158,7 +1158,7 @@
 
 /* Collapsed/Expanded Table States */
 .rankings-header.collapsed, .rankings-row.collapsed {
-    grid-template-columns: 50px 180px repeat(4, 1fr);
+    grid-template-columns: 50px 180px repeat(5, 1fr);
 }
 
 .rankings-header.expanded, .rankings-row.expanded {

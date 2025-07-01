@@ -197,13 +197,13 @@ class LeagueDetailsManager {
             <div class="rankings-header ${isExpanded ? 'expanded' : 'collapsed'}">
                 <div class="rank-col">Rank</div>
                 <div class="player-col">Player</div>
-                <div class="stat-col">Games<br>Played</div>
-                <div class="stat-col">Games<br>Won</div>
-                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Win<br>%</div>
-                <div class="stat-col">Words<br>Played</div>
-                <div class="stat-col">Words<br>Correct</div>
-                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>%</div>
-                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Avg<br>Time</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Games<br>Played</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Games<br>Won</div>
+                <div class="stat-col">Win<br>%</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>Played</div>
+                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>Correct</div>
+                <div class="stat-col">Words<br>%</div>
+                <div class="stat-col">Avg<br>Time</div>
             </div>
             ${this.rankings.overall.map((player, index) => `
                 <div class="rankings-row ${player.is_current_user ? 'current-user' : ''} ${isExpanded ? 'expanded' : 'collapsed'}">
@@ -214,13 +214,13 @@ class LeagueDetailsManager {
                         </div>
                         <span class="player-name">${this.escapeHtml(player.nickname || player.display_name)}</span>
                     </div>
-                    <div class="stat-col">${player.games_played || 0}</div>
-                    <div class="stat-col">${player.games_won || 0}</div>
-                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.win_percentage)}</div>
-                    <div class="stat-col">${player.words_played || 0}</div>
-                    <div class="stat-col">${player.words_correct || 0}</div>
-                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.word_percentage)}</div>
-                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.avg_time || '-'}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.games_played || 0}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.games_won || 0}</div>
+                    <div class="stat-col">${this.formatPercentage(player.win_percentage)}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.words_played || 0}</div>
+                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.words_correct || 0}</div>
+                    <div class="stat-col">${this.formatPercentage(player.word_percentage)}</div>
+                    <div class="stat-col">${player.avg_time || '-'}</div>
                 </div>
             `).join('')}
         `;
@@ -267,13 +267,13 @@ class LeagueDetailsManager {
                             <div class="rankings-header ${isExpanded ? 'expanded' : 'collapsed'}">
                                 <div class="rank-col">Rank</div>
                                 <div class="player-col">Player</div>
-                                <div class="stat-col">Games<br>Played</div>
-                                <div class="stat-col">Games<br>Won</div>
-                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Win<br>%</div>
-                                <div class="stat-col">Words<br>Played</div>
-                                <div class="stat-col">Words<br>Correct</div>
-                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>%</div>
-                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Avg<br>Time</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Games<br>Played</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Games<br>Won</div>
+                                <div class="stat-col">Win<br>%</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>Played</div>
+                                <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">Words<br>Correct</div>
+                                <div class="stat-col">Words<br>%</div>
+                                <div class="stat-col">Avg<br>Time</div>
                             </div>
                             ${players.map((player, index) => `
                                 <div class="rankings-row ${player.is_current_user ? 'current-user' : ''} ${isExpanded ? 'expanded' : 'collapsed'}">
@@ -284,13 +284,13 @@ class LeagueDetailsManager {
                                         </div>
                                         <span class="player-name">${this.escapeHtml(player.nickname || player.display_name)}</span>
                                     </div>
-                                    <div class="stat-col">${player.games_played || 0}</div>
-                                    <div class="stat-col">${player.games_won || 0}</div>
-                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.win_percentage)}</div>
-                                    <div class="stat-col">${player.words_played || 0}</div>
-                                    <div class="stat-col">${player.words_correct || 0}</div>
-                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${this.formatPercentage(player.word_percentage)}</div>
-                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.avg_time || '-'}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.games_played || 0}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.games_won || 0}</div>
+                                    <div class="stat-col">${this.formatPercentage(player.win_percentage)}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.words_played || 0}</div>
+                                    <div class="stat-col ${isExpanded ? '' : 'hidden-col'}">${player.words_correct || 0}</div>
+                                    <div class="stat-col">${this.formatPercentage(player.word_percentage)}</div>
+                                    <div class="stat-col">${player.avg_time || '-'}</div>
                                 </div>
                             `).join('')}
                         </div>
