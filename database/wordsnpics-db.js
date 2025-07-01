@@ -6,7 +6,10 @@ class WordsnpicsDatabaseService {
     constructor() {
         this.db = null;
         this.SQL = null;
-        this.dbPath = path.join(__dirname, 'wordsnpics.db');
+        // Use /tmp directory in production (Render) for write permissions
+        const dbDir = process.env.NODE_ENV === 'production' ? '/tmp' : __dirname;
+        this.dbPath = path.join(dbDir, 'wordsnpics.db');
+        console.log('Database path:', this.dbPath);
     }
 
     async initialize(forceSchema = false) {
@@ -15,7 +18,13 @@ class WordsnpicsDatabaseService {
             this.SQL = await initSqlJs();
             
             // Create database directory if it doesn't exist
-            await fs.mkdir(path.dirname(this.dbPath), { recursive: true });
+            try {
+                await fs.mkdir(path.dirname(this.dbPath), { recursive: true });
+                console.log('✅ Database directory ready:', path.dirname(this.dbPath));
+            } catch (mkdirError) {
+                console.log('⚠️  Directory creation warning:', mkdirError.message);
+                // Continue anyway - directory might already exist
+            }
 
             // Try to load existing database file
             let data;
