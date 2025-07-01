@@ -492,6 +492,13 @@ class ResultsPage {
         const puzzleWords = this.gameResults.puzzleWords;
         const puzzleImages = (this.fullBoardData && this.fullBoardData.images) || this.gameResults.puzzleImages;
         
+        console.log('createAnswersGrid Debug:', {
+            puzzleWords: puzzleWords?.length,
+            puzzleImages: puzzleImages?.length,
+            fullBoardData: !!this.fullBoardData,
+            gameResultsImages: this.gameResults.puzzleImages?.length
+        });
+        
         // Create word-to-image mapping from full board data
         let wordImageMap = {};
         if (this.fullBoardData && this.fullBoardData.words) {
@@ -513,8 +520,23 @@ class ResultsPage {
             });
         }
         
+        // If still no mapping, try to derive from the last turn progress (which should have correct placements)
+        if (Object.keys(wordImageMap).length === 0 && this.gameResults.turnProgress) {
+            const lastTurn = this.gameResults.turnProgress[this.gameResults.turnProgress.length - 1];
+            if (lastTurn && lastTurn.placements) {
+                console.log('Using final turn placements for word-image mapping:', lastTurn.placements);
+                Object.entries(lastTurn.placements).forEach(([wordId, imageId]) => {
+                    wordImageMap[wordId] = imageId;
+                });
+            }
+        }
+        
+        console.log('Final wordImageMap:', wordImageMap);
+        console.log('Available puzzleImages:', puzzleImages?.map(img => ({ id: img.id, url: img.url })));
+        
         // If still no mapping, create a simple distribution across available images
         if (Object.keys(wordImageMap).length === 0 && puzzleImages && puzzleWords) {
+            console.log('Falling back to simple distribution');
             const wordsPerImage = Math.ceil(puzzleWords.length / puzzleImages.length);
             puzzleWords.forEach((word, index) => {
                 const imageIndex = Math.floor(index / wordsPerImage);
@@ -541,10 +563,18 @@ class ResultsPage {
                     if (imageId) {
                         const image = puzzleImages.find(img => img.id === imageId);
                         if (image && image.url) {
+                            console.log(`Setting background image for word ${word.text}: ${image.url}`);
                             cell.style.backgroundImage = `url(${image.url})`;
+                            cell.style.backgroundSize = 'cover';
+                            cell.style.backgroundPosition = 'center';
                         } else {
+                            console.log(`No image found for word ${word.text}, imageId: ${imageId}`);
                         }
+                    } else {
+                        console.log(`No imageId found for word ${word.text} (id: ${word.id})`);
                     }
+                } else {
+                    console.log('No puzzleImages available');
                 }
                 
                 // Create text span that appears above overlay
@@ -793,7 +823,18 @@ class ResultsPage {
         const sourceData = this.fullBoardData || this.gameResults;
         const puzzleImages = sourceData.images || sourceData.puzzleImages;
         
-        if (!puzzleImages || puzzleImages.length === 0) return;
+        console.log('drawImageCollage Debug:', {
+            sourceData: !!sourceData,
+            puzzleImages: puzzleImages?.length,
+            fullBoardData: !!this.fullBoardData,
+            gameResults: !!this.gameResults,
+            imageUrls: puzzleImages?.map(img => img.url)
+        });
+        
+        if (!puzzleImages || puzzleImages.length === 0) {
+            console.log('No puzzle images available for collage');
+            return;
+        }
         
         // Sort images by word count
         const sortedImages = [...puzzleImages].sort((a, b) => b.matchCount - a.matchCount);
