@@ -1226,6 +1226,9 @@ class WORDLINKSGame {
             }
         });
         
+        // Update dice indicators to reflect correct words from previous turns
+        this.updateImageCounts();
+        
         console.log(`✅ Restored visual state for ${this.correctWords.size} correct words from previous turns`);
     }
     
