@@ -35,7 +35,25 @@ async function startServer() {
             console.log('   Run: node scripts/init-database.js');
             process.exit(1);
         }
-        
+    } catch (error) {
+        if (error.message && error.message.includes('database disk image is malformed')) {
+            console.error('💥 Database corruption detected!');
+            console.error('🔧 Database corruption can often be fixed by cleaning recent game data');
+            console.error('');
+            console.error('🛠️  Recovery options (try in order):');
+            console.error('   1. Clean recent games: node scripts/clean-recent-games.js');
+            console.error('   2. Full data recovery: node scripts/fix-database-corruption.js');
+            console.error('   3. Fresh database: node scripts/reset-production-db.js');
+            console.error('');
+            console.error('💡 Option 1 preserves user data, Option 2 attempts data recovery, Option 3 starts fresh');
+            console.error('');
+            process.exit(1);
+        } else {
+            throw error;
+        }
+    }
+    
+    try {
         // Configure session store
         sessionStore = new SQLiteSessionStore({ 
             dbService,
