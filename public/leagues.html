@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leagues - WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/styles.css?v=2.2">
+    <link rel="stylesheet" href="/css/leagues.css?v=2.6">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header matching game page -->
+        <header>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="/images/wordsnpics-logo.svg?v=4.0" alt="WORDSNPICS" class="game-logo">
+                </a>
+                <div class="page-title">Leagues</div>
+            </div>
+            <div class="header-right">
+                <div class="user-section" id="userSection">
+                    <!-- User info will be populated by auth.js -->
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="leagues-main">
+            <!-- Profile Check Message -->
+            <div id="profileMessage" class="profile-message" style="display: none;">
+                <div class="message-content">
+                    <h3>Profile Required</h3>
+                    <p>Please select an active profile to access leagues and competitions.</p>
+                    <a href="/profiles" class="primary-btn">Manage Profiles</a>
+                </div>
+            </div>
+
+            <!-- League Actions -->
+            <div class="league-actions" id="leagueActions" style="display: none;">
+                <div class="actions-row">
+                    <button class="primary-btn" id="createLeagueBtn">
+                        <span class="btn-icon">🏆</span>
+                        Create League
+                    </button>
+                    <button class="secondary-btn" id="joinLeagueBtn">
+                        <span class="btn-icon">🎯</span>
+                        Join League
+                    </button>
+                </div>
+            </div>
+
+            <!-- My Leagues Section -->
+            <section class="leagues-section" id="myLeaguesSection" style="display: none;">
+                <div class="section-header">
+                    <h2>My Leagues</h2>
+                    <div class="section-actions">
+                        <button class="refresh-btn" id="refreshLeaguesBtn" title="Refresh">
+                            <span>🔄</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="leagues-grid" id="myLeaguesGrid">
+                    <div class="loading-message">Loading your leagues...</div>
+                </div>
+            </section>
+
+            <!-- League Details Modal -->
+            <div class="modal" id="leagueModal">
+                <div class="modal-content league-modal-content">
+                    <div class="modal-header">
+                        <h3 id="leagueModalTitle">League Details</h3>
+                        <button class="modal-close" id="closeLeagueModal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="leagueModalBody">
+                        <!-- League details will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create League Modal -->
+            <div class="modal" id="createLeagueModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create New League</h3>
+                        <button class="modal-close" id="closeCreateModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createLeagueForm">
+                            <div class="form-group">
+                                <label for="leagueName">League Name *</label>
+                                <input type="text" id="leagueName" name="name" required maxlength="50" 
+                                       placeholder="e.g., Johnson Family Challenge">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="leagueDescription">Description</label>
+                                <textarea id="leagueDescription" name="description" maxlength="200" 
+                                          placeholder="Optional description of your league"></textarea>
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="boardType">Board Type Focus</label>
+                                <select id="boardType" name="boardTypeId">
+                                    <option value="">All board types</option>
+                                    <!-- Will be populated with board types -->
+                                </select>
+                            </div>
+                            
+                            
+                            <div class="form-actions">
+                                <button type="button" class="secondary-btn" id="cancelCreateBtn">Cancel</button>
+                                <button type="submit" class="primary-btn">Create League</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Join League Modal -->
+            <div class="modal" id="joinLeagueModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Join League</h3>
+                        <button class="modal-close" id="closeJoinModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="joinLeagueForm">
+                            <div class="form-group">
+                                <label for="leagueCode">League Code *</label>
+                                <input type="text" id="leagueCode" name="leagueCode" required 
+                                       maxlength="6" pattern="[A-Z0-9]{6}" 
+                                       placeholder="Enter 6-character code (e.g., ABC123)"
+                                       style="text-transform: uppercase;">
+                                <div class="form-help">
+                                    Ask the league creator for the 6-character league code
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nickname">Nickname (Optional)</label>
+                                <input type="text" id="nickname" name="nickname" maxlength="30" 
+                                       placeholder="Custom name for this league">
+                                <div class="form-help">
+                                    Leave blank to use your profile name
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="secondary-btn" id="cancelJoinBtn">Cancel</button>
+                                <button type="submit" class="primary-btn">Join League</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discover Leagues Modal -->
+            <div class="modal" id="discoverModal">
+                <div class="modal-content discover-modal-content">
+                    <div class="modal-header">
+                        <h3>Discover Public Leagues</h3>
+                        <button class="modal-close" id="closeDiscoverModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="discover-filters">
+                            <div class="filter-group">
+                                <input type="text" id="searchLeagues" placeholder="Search leagues by name...">
+                                <button class="secondary-btn" id="searchBtn">Search</button>
+                            </div>
+                        </div>
+                        <div class="discover-results" id="discoverResults">
+                            <div class="loading-message">Loading public leagues...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <span class="footer-text">
+                WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS © 2025
+            </span>
+        </footer>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/leagues.js?v=2.2"></script>
+</body>
+</html>

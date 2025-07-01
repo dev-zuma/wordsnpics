@@ -1,0 +1,64 @@
+{
+  "id": "demo",
+  "date": "2025-06-23",
+  "title": "Demo Puzzle",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Weather",
+      "narrative": "Words related to weather phenomena and atmospheric conditions",
+      "matchCount": 6,
+      "url": "/images/placeholder-weather.svg"
+    },
+    {
+      "id": "img2",
+      "theme": "Animals",
+      "narrative": "Common animals that people often keep as pets or encounter in daily life",
+      "matchCount": 5,
+      "url": "/images/placeholder-animals.svg"
+    },
+    {
+      "id": "img3",
+      "theme": "Food",
+      "narrative": "Popular food items that are commonly enjoyed as meals or snacks",
+      "matchCount": 4,
+      "url": "/images/placeholder-food.svg"
+    },
+    {
+      "id": "img4",
+      "theme": "Sports",
+      "narrative": "Sports activities that involve balls and competitive play",
+      "matchCount": 3,
+      "url": "/images/placeholder-sports.svg"
+    },
+    {
+      "id": "img5",
+      "theme": "Music",
+      "narrative": "Musical instruments that produce melodic sounds",
+      "matchCount": 2,
+      "url": "/images/placeholder-music.svg"
+    }
+  ],
+  "words": [
+    {"id": "w1", "text": "storm", "correctImageId": "img1", "difficulty": "easy"},
+    {"id": "w2", "text": "rain", "correctImageId": "img1", "difficulty": "easy"},
+    {"id": "w3", "text": "sunny", "correctImageId": "img1", "difficulty": "easy"},
+    {"id": "w4", "text": "cloudy", "correctImageId": "img1", "difficulty": "medium"},
+    {"id": "w5", "text": "thunder", "correctImageId": "img1", "difficulty": "medium"},
+    {"id": "w6", "text": "snow", "correctImageId": "img1", "difficulty": "easy"},
+    {"id": "w7", "text": "cat", "correctImageId": "img2", "difficulty": "easy"},
+    {"id": "w8", "text": "dog", "correctImageId": "img2", "difficulty": "easy"},
+    {"id": "w9", "text": "bird", "correctImageId": "img2", "difficulty": "easy"},
+    {"id": "w10", "text": "fish", "correctImageId": "img2", "difficulty": "medium"},
+    {"id": "w11", "text": "rabbit", "correctImageId": "img2", "difficulty": "medium"},
+    {"id": "w12", "text": "pizza", "correctImageId": "img3", "difficulty": "easy"},
+    {"id": "w13", "text": "burger", "correctImageId": "img3", "difficulty": "easy"},
+    {"id": "w14", "text": "salad", "correctImageId": "img3", "difficulty": "medium"},
+    {"id": "w15", "text": "pasta", "correctImageId": "img3", "difficulty": "difficult"},
+    {"id": "w16", "text": "soccer", "correctImageId": "img4", "difficulty": "difficult"},
+    {"id": "w17", "text": "tennis", "correctImageId": "img4", "difficulty": "difficult"},
+    {"id": "w18", "text": "golf", "correctImageId": "img4", "difficulty": "difficult"},
+    {"id": "w19", "text": "guitar", "correctImageId": "img5", "difficulty": "extremely_difficult"},
+    {"id": "w20", "text": "piano", "correctImageId": "img5", "difficulty": "extremely_difficult"}
+  ]
+}

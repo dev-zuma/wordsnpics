@@ -1,0 +1,70 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Build output
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cache
+.cache/
+.eslintcache
+.parcel-cache/
+
+# Debug files
+debug.js
+test-server.js
+
+# Database files - exclude all for fresh production deployment
+database/*.db
+database/*.db-*
+database/*.db-journal
+database/*.db-wal
+database/*.db-shm
+
+# Generated images - exclude temp files but include final images
+public/images/generated/*.txt
+public/images/generated/*-temp.*
+
+# NOTE: For production deployment:
+# - Database will be initialized fresh using init-database.js
+# - Static images are included in the repository

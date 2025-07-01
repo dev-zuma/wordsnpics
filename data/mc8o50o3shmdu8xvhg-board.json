@@ -1,0 +1,164 @@
+{
+  "id": "mc8o50o3shmdu8xvhg",
+  "date": "2025-06-23",
+  "title": "Board2",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Paths and Journeys",
+      "narrative": "These words represent different kinds of pathways or routes that guide movement through different contexts—physical, mental, or metaphorical. They all symbolize a route taken to reach a destination or understanding.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750657206187.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Light and Darkness",
+      "narrative": "This group explores different aspects or states of illumination—both literal and metaphorical. They symbolize clarity, obscurity, or the transition between understanding and confusion.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750657217601.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Emotions and States",
+      "narrative": "These words describe different emotional or mental states that fluctuate and influence behavior or perception. They represent internal conditions that can change or conflict with each other.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750657227795.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Time and Transformation",
+      "narrative": "This group embodies the concept of change over time, emphasizing transformation and cyclical patterns that affect growth and decay.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750657235892.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Mystery and Discovery",
+      "narrative": "These words evoke the sense of uncovering hidden truths or exploring the unknown, emphasizing curiosity and the pursuit of knowledge.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750657250834.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "road",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "trail",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "course",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "bridge",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "detour",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "migration",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "shine",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "glow",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "shadow",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "twilight",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "dusk",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "anger",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "hope",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "fear",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "calm",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "growth",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "decay",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "renewal",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "secret",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "revelation",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

@@ -1,0 +1,441 @@
+/* Profile View Page Styles - Mobile First */
+
+/* Ensure CSS variables are available */
+:root {
+    --primary: #2c3e50;
+    --secondary: #f1c40f;
+    --success: #27ae60;
+    --shadow: #7f8c8d;
+    --soft-bg: #ecf0f1;
+    --disabled: #95a5a6;
+    --highlight: #e67e22;
+}
+
+/* Ensure proper box sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Prevent horizontal overflow */
+html, body {
+    overflow-x: hidden;
+}
+
+.profile-view-main {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 200px);
+}
+
+/* Loading & Error States */
+.loading-state, .error-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--shadow);
+}
+
+.loading-icon, .error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.error-state h2 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.error-state p {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.error-state .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--secondary);
+    color: var(--primary);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.error-state .btn:hover {
+    background: var(--highlight);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Profile Header */
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+/* Stats Section */
+.stats-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0 0 1rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid rgba(44, 62, 80, 0.1);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--shadow);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* History Section */
+.history-section {
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .section-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.history-filters {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--soft-bg);
+    border-radius: 6px;
+    background: white;
+    color: var(--primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+/* Games List */
+.games-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.game-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(44, 62, 80, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.game-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.game-graphic {
+    width: 60px;
+    height: 75px;
+    border-radius: 8px;
+    background: var(--soft-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid rgba(44, 62, 80, 0.1);
+}
+
+.game-graphic canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.game-graphic-placeholder {
+    font-size: 1.5rem;
+    color: var(--shadow);
+}
+
+.game-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-date {
+    font-size: 0.8rem;
+    color: var(--shadow);
+    margin-bottom: 0.25rem;
+}
+
+.game-title {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.game-score {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 0.75rem;
+}
+
+.game-score.win {
+    color: var(--success);
+}
+
+.game-score.incomplete {
+    color: var(--shadow);
+}
+
+.game-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.game-action-btn {
+    flex: 1;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.view-btn {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.view-btn:hover {
+    background: var(--highlight);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.share-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.share-btn:hover {
+    background: var(--shadow);
+    transform: translateY(-1px);
+}
+
+/* No Games Message */
+.no-games-message, .loading-games {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--shadow);
+    font-style: italic;
+}
+
+/* Load More Button */
+.load-more-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.load-more-btn {
+    background: var(--secondary);
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.load-more-btn:hover {
+    background: var(--highlight);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.load-more-btn:disabled {
+    background: var(--disabled);
+    color: white;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Desktop optimizations */
+@media (min-width: 768px) {
+    .profile-view-main {
+        padding: 2rem;
+        gap: 2.5rem;
+    }
+    
+    .profile-avatar-section {
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+    }
+    
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+    
+    .profile-name {
+        font-size: 2.2rem;
+        align-self: center;
+    }
+    
+    .game-graphic {
+        width: 80px;
+        height: 100px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .profile-view-main {
+        padding: 0.75rem;
+        gap: 1rem;
+    }
+    
+    .profile-header {
+        padding: 1.5rem;
+    }
+    
+    .stats-section, .history-section {
+        padding: 1rem;
+    }
+    
+    .history-filters {
+        flex-direction: column;
+    }
+    
+    .filter-select {
+        width: 100%;
+        min-width: 0;
+    }
+    
+    .game-card-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .game-date {
+        align-self: flex-start;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .game-actions {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    
+    .game-action-btn {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+}

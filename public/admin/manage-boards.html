@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Boards - WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container manage-boards-page">
+        <header class="admin-header">
+            <div class="header-nav">
+                <a href="/admin" class="back-link">← Back to Admin</a>
+            </div>
+            <h1>Manage Boards</h1>
+            <p>Create and manage puzzle board types</p>
+        </header>
+
+        <main class="admin-main">
+            <div class="boards-management-container">
+                <!-- Left Panel - Board Types List -->
+                <div class="boards-left-panel">
+                    <div class="panel-header">
+                        <h2>Board Types</h2>
+                        <button id="newBoardBtn" class="primary-btn">
+                            <span class="btn-icon">➕</span>
+                            New Board
+                        </button>
+                    </div>
+                    
+                    <div id="boardTypesList" class="board-types-list">
+                        <div class="loading">Loading board types...</div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Board Details/Edit -->
+                <div class="boards-right-panel">
+                    <div id="welcomeMessage" class="welcome-message">
+                        <h2>Welcome to Board Management</h2>
+                        <p>Select a board type from the left to view and edit its details, or click "New Board" to create a new one.</p>
+                    </div>
+
+                    <div id="boardEditForm" class="board-edit-form" style="display: none;">
+                        <div class="form-header">
+                            <h2 id="formTitle">Edit Board Type</h2>
+                        </div>
+
+                        <form id="boardForm" class="board-form">
+                            <input type="hidden" id="boardEditId" name="editId">
+                            
+                            <div class="form-group">
+                                <label for="boardId">Board ID</label>
+                                <input type="text" id="boardId" name="id" required 
+                                       pattern="[a-z0-9-]+" 
+                                       placeholder="e.g., sports-trivia">
+                                <small>Lowercase letters, numbers, and hyphens only</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="boardName">Board Name</label>
+                                <input type="text" id="boardName" name="name" required 
+                                       placeholder="e.g., Sports Trivia">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="boardIcon">Icon (Emoji)</label>
+                                <input type="text" id="boardIcon" name="icon" required 
+                                       placeholder="e.g., ⚽" maxlength="2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="boardOneLiner">One-liner Description</label>
+                                <input type="text" id="boardOneLiner" name="one_liner" required 
+                                       placeholder="Brief catchy description">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="boardPrompt">AI Generation Prompt</label>
+                                <textarea id="boardPrompt" name="prompt" rows="6" required
+                                          placeholder="Specific instructions for generating words for this board type"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="boardDescription">Description</label>
+                                <input type="text" id="boardDescription" name="description" 
+                                       placeholder="Longer description (optional, will use one-liner if empty)">
+                            </div>
+
+                            <div class="form-group form-group-inline">
+                                <label>
+                                    <input type="checkbox" id="boardActive" name="is_active">
+                                    Active (available for puzzle generation)
+                                </label>
+                            </div>
+
+                            <div class="form-group form-group-inline">
+                                <label>
+                                    <input type="checkbox" id="boardPremium" name="is_premium">
+                                    Premium (requires subscription)
+                                </label>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" id="saveBtn" class="primary-btn">Save Changes</button>
+                                <button type="button" id="cancelBtn" class="secondary-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check admin access before loading the admin interface
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch('/auth/user');
+                const data = await response.json();
+                
+                if (!data.user) {
+                    window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                
+                if (data.user.email !== 'adnanzuma@gmail.com') {
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                            <h2>Access Denied</h2>
+                            <p>You do not have permission to access the admin panel.</p>
+                            <a href="/" style="color: #2C3E50;">← Back to Game</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // User is authorized - load the admin interface
+                const script = document.createElement('script');
+                script.src = '/js/admin-manage-boards.js';
+                document.body.appendChild(script);
+                
+            } catch (error) {
+                window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

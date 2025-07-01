@@ -1,0 +1,164 @@
+{
+  "id": "mc8puaxe35cqgr4mgwo",
+  "date": "2025-06-23",
+  "title": "Board9",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Hidden Strengths",
+      "narrative": "These words represent qualities that are often unseen but essential in overcoming challenges. They symbolize internal powers that aren’t immediately obvious but become vital when facing adversity.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750660088209.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Time & Change",
+      "narrative": "These words are linked by their connection to the passage of time and how moments evolve or influence events. They reflect the fluid nature of life and the inevitable march toward transformation.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750660088975.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Hidden Layers",
+      "narrative": "These words relate to levels or aspects beneath the surface, representing depth, complexity, or underlying truths that are not immediately visible but crucial to understanding the whole.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750660091655.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Journey & Discovery",
+      "narrative": "These words symbolize the process of exploration—physically or intellectually—where each step leads to new insights and unexpected revelations, emphasizing growth through discovery.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750660117021.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Contrasts & Balances",
+      "narrative": "These words highlight opposing forces or concepts that create harmony through their differences, illustrating balance in life or ideas that are fundamentally opposite yet interconnected.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750660127947.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "courage",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "patience",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "resilience",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "perseverance",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "determination",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "fortitude",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "hour",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "moment",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "era",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "cycle",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "future",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "core",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "subtext",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "foundation",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "depth",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "quest",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "voyage",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "discovery",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "light",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "dark",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "id": "mc8q08pcydkyzkvo2sk",
+  "date": "2025-06-23",
+  "title": "Board 10",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Hidden Currents",
+      "narrative": "These words symbolize unseen forces influencing change and movement in different contexts. Whether in nature, society, or technology, they represent mechanisms that drive progress without obvious presence.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750660381857.png"
+    },
+    {
+      "id": "img2",
+      "theme": "States of Mind",
+      "narrative": "These words represent different mental or emotional states that influence human perception and decision-making. They are abstract but fundamentally shape how individuals experience reality.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750660390764.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Historical Turning Points",
+      "narrative": "These words mark pivotal moments or concepts that led to significant shifts in history or thought, representing critical junctures that changed the course of events or ideas.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750660386376.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Mythic Elements",
+      "narrative": "These words evoke powerful symbolic entities that embody primal forces or archetypes from mythology, representing fundamental aspects of human storytelling and belief.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750660381205.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Dualities of Existence",
+      "narrative": "These words represent fundamental opposites that define human experience and understanding—life and death, presence and absence, order and chaos.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750660382994.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "Erosion",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "Voltage",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "Tide",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "Wind",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "Flow",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "Magnet",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "Calm",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "Impulse",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "Focus",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "Doubt",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "Insight",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "Revolution",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "Discovery",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "Invention",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "Reform",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "Dragon",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "Phoenix",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "Titan",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "Life",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "Void",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

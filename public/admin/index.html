@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin Panel</h1>
+            <p>Manage puzzle boards</p>
+            <div class="admin-user-info" id="adminUserInfo">
+                <!-- User info will be populated by JavaScript -->
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-menu">
+                <a href="/admin/generate-games" class="admin-card">
+                    <div class="card-icon">✨</div>
+                    <h2>Generate New Game</h2>
+                    <p>Create a new puzzle game using AI</p>
+                </a>
+                
+                <a href="/admin/view" class="admin-card">
+                    <div class="card-icon">📋</div>
+                    <h2>View Existing Games</h2>
+                    <p>Browse and manage saved games</p>
+                </a>
+                
+                <a href="/admin/manage-boards" class="admin-card">
+                    <div class="card-icon">⚙️</div>
+                    <h2>Manage Board Types</h2>
+                    <p>Create and configure game board types</p>
+                </a>
+                
+                <a href="/admin/daily-puzzles" class="admin-card">
+                    <div class="card-icon">📅</div>
+                    <h2>Daily Puzzle Management</h2>
+                    <p>Generate and schedule daily puzzles with global timing</p>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check admin access and load user info
+        async function checkAdminAccess() {
+            try {
+                // Add cache busting to ensure fresh auth status
+                const response = await fetch('/auth/user?t=' + Date.now());
+                const data = await response.json();
+                console.log('Client: Auth status response:', data);
+                
+                if (!data.user) {
+                    // Redirect to Google OAuth with return URL
+                    window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                
+                // Check if user is admin
+                if (data.user.email !== 'adnanzuma@gmail.com') {
+                    // Show access denied message
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                            <h2>Access Denied</h2>
+                            <p>You do not have permission to access the admin panel.</p>
+                            <p>Current user: ${data.user.email}</p>
+                            <a href="/" style="color: #2C3E50; text-decoration: none;">← Back to Game</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // User is authorized admin - show user info
+                document.getElementById('adminUserInfo').innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+                        <img src="${data.user.avatar}" alt="Admin" style="width: 24px; height: 24px; border-radius: 50%;">
+                        <span>Welcome, ${data.user.name}</span>
+                        <a href="/auth/logout" style="color: #fff; opacity: 0.8; margin-left: 1rem;">Logout</a>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                // Redirect to OAuth if there's any error
+                window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        
+        // Run auth check when page loads
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

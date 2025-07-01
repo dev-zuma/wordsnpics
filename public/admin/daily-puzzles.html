@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Puzzle Management - WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin-daily.css">
+</head>
+<body>
+    <div class="admin-container daily-puzzles-page">
+        <header class="admin-header">
+            <div class="header-nav">
+                <a href="/admin" class="back-link">← Back to Admin</a>
+            </div>
+            <h1>Daily Puzzle Management</h1>
+            <p>Generate and manage daily puzzles for all board types</p>
+        </header>
+
+        <main class="admin-main">
+            <div class="daily-puzzles-container">
+                <!-- Left Panel - Calendar and Controls -->
+                <div class="daily-left-panel">
+                    <!-- Calendar Section -->
+                    <div class="calendar-section">
+                        <div class="calendar-header">
+                            <button id="prevMonth" class="nav-btn">‹</button>
+                            <h3 id="monthYear" class="month-year"></h3>
+                            <button id="nextMonth" class="nav-btn">›</button>
+                        </div>
+                        
+                        <div class="calendar-grid" id="calendar">
+                            <div class="calendar-day-header">Sun</div>
+                            <div class="calendar-day-header">Mon</div>
+                            <div class="calendar-day-header">Tue</div>
+                            <div class="calendar-day-header">Wed</div>
+                            <div class="calendar-day-header">Thu</div>
+                            <div class="calendar-day-header">Fri</div>
+                            <div class="calendar-day-header">Sat</div>
+                            <!-- Calendar days will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Generation Button -->
+                    <div class="generation-section">
+                        <button id="generateAllBtn" class="primary-btn" disabled>
+                            <span class="btn-icon">🎲</span>
+                            Generate All Puzzles for the Day
+                        </button>
+                        <div class="selected-date" id="selectedDateInfo">
+                            Select a date from the calendar
+                        </div>
+                    </div>
+
+                    <!-- Board List -->
+                    <div class="board-list-section">
+                        <h4>Active Boards</h4>
+                        <div class="board-list" id="boardList">
+                            <!-- Board list will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Game Details -->
+                <div class="daily-right-panel">
+                    <div class="game-details-section">
+                        <div class="game-header">
+                            <h3 id="gameTitle">Select a Board</h3>
+                            <button id="generateGameBtn" class="primary-btn" style="display: none;">
+                                <span class="btn-icon">🎯</span>
+                                Generate Game
+                            </button>
+                        </div>
+                        
+                        <div class="game-content" id="gameContent">
+                            <div class="no-selection">
+                                <p>Select a date from the calendar and a board from the list to view game details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Generation Progress Modal -->
+    <div id="progressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="progressTitle">Generating Puzzle</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Initializing...</div>
+                </div>
+                <div class="progress-details" id="progressDetails">
+                    <!-- Detailed progress will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check admin access before loading the admin interface
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch('/auth/user');
+                const data = await response.json();
+                
+                if (!data.user) {
+                    window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                
+                if (data.user.email !== 'adnanzuma@gmail.com') {
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                            <h2>Access Denied</h2>
+                            <p>You do not have permission to access the admin panel.</p>
+                            <a href="/" style="color: #2C3E50;">← Back to Game</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // User is authorized - load the admin interface
+                const script = document.createElement('script');
+                script.src = '/js/admin-daily-puzzles.js?v=2.0';
+                document.body.appendChild(script);
+                
+            } catch (error) {
+                window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

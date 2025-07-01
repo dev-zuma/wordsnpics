@@ -1,0 +1,164 @@
+{
+  "id": "mc8qb0wplxhxijvlgqk",
+  "date": "2025-06-23",
+  "title": "Board11",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Hidden Currents",
+      "narrative": "These words are connected by the idea of unseen forces influencing outcomes, whether in nature, society, or personal decision-making. They all involve aspects that are not immediately visible but shape the visible world.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750660885300.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Paths of Transformation",
+      "narrative": "These words depict different ways in which something can change or evolve, often involving a process or journey that alters the original state into something new. They symbolize transitions and shifts in form or condition.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750660880500.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Foundations of Power",
+      "narrative": "These words relate to fundamental concepts that underpin authority, control, and influence, whether through physical strength, social structures, or mental resilience. They are core to understanding how power is maintained or challenged.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750660884847.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Time and Memory",
+      "narrative": "These words focus on aspects of experience that involve perception, remembrance, and the flow of moments. They illustrate how time influences our understanding and how memories shape identity.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750660909397.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Opposites and Balance",
+      "narrative": "These words represent fundamental dualities that define balance in life, nature, and concepts—such as light and dark, chaos and order—highlighting the importance of harmony.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750660908490.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "gravity",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "magnet",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "tide",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "wind",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "electricity",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "current",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "metamorphosis",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "journey",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "evolution",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "transition",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "displacement",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "strength",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "authority",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "stability",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "resilience",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "moment",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "nostalgia",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "recollection",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "chaos",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "order",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

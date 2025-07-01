@@ -1,0 +1,164 @@
+{
+  "id": "mc8o0htkycoajm8rb8",
+  "date": "2025-06-23",
+  "title": "Board1",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Hidden Paths",
+      "narrative": "These words all relate to ways or routes that are not immediately visible or straightforward. They symbolize the concept of secret or obscure passages that require exploration beyond the obvious.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750657043335.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Layers of Reality",
+      "narrative": "These words describe different levels or states that can exist simultaneously or sequentially, representing the concept of multiple layers or dimensions of perception and existence.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750656996932.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Time’s Flow",
+      "narrative": "These words are connected through the concept of the flow and perception of time, illustrating how moments can be experienced differently or manipulated.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750657004217.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Light and Darkness",
+      "narrative": "These words explore the duality of illumination and obscurity, representing contrasts that define perception, knowledge, and mystery.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750657006921.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Foundations of Thought",
+      "narrative": "These words symbolize fundamental elements of reasoning and imagination, foundational to ideas and creativity.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750657011549.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "tunnel",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "doorway",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "passage",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "trapdoor",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "hidden",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "concealed",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "surface",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "depth",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "dimension",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "veil",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "overlay",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "moment",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "passage",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "duration",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "cycle",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "glow",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "obscure",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "twilight",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "idea",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "imagination",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

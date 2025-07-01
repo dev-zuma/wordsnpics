@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Boards - WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-nav">
+                <a href="/admin" class="back-link">← Back to Admin</a>
+            </div>
+            <h1>View Existing Boards</h1>
+            <p>Browse and manage saved puzzle boards</p>
+        </header>
+
+        <main class="admin-main">
+            <div class="boards-container">
+                <!-- Board List -->
+                <section class="board-list-section">
+                    <h2>Available Games</h2>
+                    <!-- Board Type Filter -->
+                    <div class="board-type-filter" id="boardTypeFilter">
+                        <div class="loading">Loading board types...</div>
+                    </div>
+                    <div id="boardList" class="board-list">
+                        <div class="loading">Loading games...</div>
+                    </div>
+                </section>
+
+                <!-- Board Details -->
+                <section class="board-details-section hidden" id="boardDetails">
+                    <div class="board-header">
+                        <h2 id="boardTitle">Board Details</h2>
+                        <button id="deleteBoardBtn" class="delete-board-btn">🗑️ Delete Board</button>
+                    </div>
+                    <div id="boardContent" class="board-content">
+                        <!-- Board details will be inserted here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check admin access before loading the admin interface
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch('/auth/user');
+                const data = await response.json();
+                
+                if (!data.user) {
+                    window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                
+                if (data.user.email !== 'adnanzuma@gmail.com') {
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                            <h2>Access Denied</h2>
+                            <p>You do not have permission to access the admin panel.</p>
+                            <a href="/" style="color: #2C3E50;">← Back to Game</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // User is authorized - load the admin interface
+                const script = document.createElement('script');
+                script.src = '/js/admin-view.js';
+                document.body.appendChild(script);
+                
+            } catch (error) {
+                window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

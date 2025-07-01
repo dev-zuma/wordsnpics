@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS - Manage Profiles</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Choose your WORDSNPICS profile to play. Family-friendly word puzzle game with multiple profiles.">
+    <meta name="keywords" content="wordsnpics profiles, family word game, multi-user puzzles">
+    <meta name="author" content="WORDSNPICS">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WORDSNPICS">
+    <meta property="og:title" content="WORDSNPICS - Choose Profile">
+    <meta property="og:description" content="Choose your WORDSNPICS profile to play. Family-friendly word puzzle game.">
+    <meta property="og:url" content="https://wordsnpics.onrender.com/profiles">
+    <meta property="og:image" content="https://wordsnpics.onrender.com/images/wordsnpics-logo.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="WORDSNPICS Profiles">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="WORDSNPICS - Choose Profile">
+    <meta name="twitter:description" content="Choose your WORDSNPICS profile to play. Family-friendly word puzzle game.">
+    <meta name="twitter:image" content="https://wordsnpics.onrender.com/images/wordsnpics-logo.svg">
+    <meta name="twitter:image:alt" content="WORDSNPICS Profiles">
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2C3E50">
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/profiles.css?v=1.0">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="/images/wordsnpics-logo.svg?v=4.0" alt="WORDSNPICS" class="game-logo">
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="user-section" id="userSection">
+                    <!-- User info will be inserted here -->
+                </div>
+            </div>
+        </header>
+
+        <main class="profiles-main">
+            <div class="profiles-header">
+                <h1>Manage Profiles</h1>
+                <p class="profiles-subtitle">Add, edit, or select profiles for your account</p>
+            </div>
+
+            <div class="add-profile-button">
+                <!-- Add Profile button will be inserted here -->
+            </div>
+
+            <div class="profiles-grid" id="profilesGrid">
+                <!-- Profile cards will be inserted here -->
+            </div>
+
+
+            <div class="loading-message" id="loadingMessage">Loading profiles...</div>
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <p>Failed to load profiles. <button onclick="location.reload()">Try again</button></p>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <span class="footer-text">
+                WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS © 2025
+            </span>
+        </footer>
+    </div>
+
+    <!-- Add Profile Modal -->
+    <div id="addProfileModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h2>Add New Profile</h2>
+                <button class="profile-modal-close" id="closeAddModal">&times;</button>
+            </div>
+            <div class="profile-modal-body">
+                <form id="addProfileForm">
+                    <div class="form-group">
+                        <label for="displayName">Display Name *</label>
+                        <input type="text" id="displayName" name="displayName" required maxlength="100" 
+                               placeholder="Enter a friendly name (e.g., Emma, Dad, etc.)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username *</label>
+                        <input type="text" id="username" name="username" required maxlength="50" 
+                               placeholder="Choose a unique username">
+                        <div class="form-help">Letters, numbers, and underscores only. This cannot be changed later.</div>
+                        <div class="username-feedback" id="usernameFeedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Avatar</label>
+                        <div class="avatar-customization">
+                            <div class="avatar-preview" id="avatarPreview">
+                                <div class="avatar-icon">⭐</div>
+                            </div>
+                            <div class="avatar-controls">
+                                <div class="color-picker">
+                                    <label>Color:</label>
+                                    <div class="color-options">
+                                        <input type="radio" name="avatarColor" value="#e74c3c" id="color1">
+                                        <label for="color1" class="color-option" style="background: #e74c3c"></label>
+                                        
+                                        <input type="radio" name="avatarColor" value="#3498db" id="color2" checked>
+                                        <label for="color2" class="color-option" style="background: #3498db"></label>
+                                        
+                                        <input type="radio" name="avatarColor" value="#2ecc71" id="color3">
+                                        <label for="color3" class="color-option" style="background: #2ecc71"></label>
+                                        
+                                        <input type="radio" name="avatarColor" value="#f39c12" id="color4">
+                                        <label for="color4" class="color-option" style="background: #f39c12"></label>
+                                        
+                                        <input type="radio" name="avatarColor" value="#9b59b6" id="color5">
+                                        <label for="color5" class="color-option" style="background: #9b59b6"></label>
+                                        
+                                        <input type="radio" name="avatarColor" value="#e67e22" id="color6">
+                                        <label for="color6" class="color-option" style="background: #e67e22"></label>
+                                    </div>
+                                </div>
+                                <div class="icon-picker">
+                                    <label>Icon:</label>
+                                    <div class="icon-options">
+                                        <input type="radio" name="avatarIcon" value="star" id="icon1" checked>
+                                        <label for="icon1" class="icon-option">⭐</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="heart" id="icon2">
+                                        <label for="icon2" class="icon-option">❤️</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="rocket" id="icon3">
+                                        <label for="icon3" class="icon-option">🚀</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="crown" id="icon4">
+                                        <label for="icon4" class="icon-option">👑</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="diamond" id="icon5">
+                                        <label for="icon5" class="icon-option">💎</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="lightning" id="icon6">
+                                        <label for="icon6" class="icon-option">⚡</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="flower" id="icon7">
+                                        <label for="icon7" class="icon-option">🌸</label>
+                                        
+                                        <input type="radio" name="avatarIcon" value="rainbow" id="icon8">
+                                        <label for="icon8" class="icon-option">🌈</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthYear">Birth Year (Optional)</label>
+                        <input type="number" id="birthYear" name="birthYear" min="1900" max="2030" 
+                               placeholder="e.g., 2015 (for age-appropriate features)">
+                        <div class="form-help">Helps us provide age-appropriate content.</div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelAddProfile">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitAddProfile" disabled>Create Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h2>Edit Profile</h2>
+                <button class="profile-modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="profile-modal-body">
+                <form id="editProfileForm">
+                    <input type="hidden" id="editProfileId" name="profileId">
+                    
+                    <div class="form-group">
+                        <label for="editDisplayName">Display Name *</label>
+                        <input type="text" id="editDisplayName" name="displayName" required maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Avatar</label>
+                        <div class="avatar-customization">
+                            <div class="avatar-preview" id="editAvatarPreview">
+                                <div class="avatar-icon">⭐</div>
+                            </div>
+                            <div class="avatar-controls">
+                                <div class="color-picker">
+                                    <label>Color:</label>
+                                    <div class="color-options">
+                                        <input type="radio" name="editAvatarColor" value="#e74c3c" id="editColor1">
+                                        <label for="editColor1" class="color-option" style="background: #e74c3c"></label>
+                                        
+                                        <input type="radio" name="editAvatarColor" value="#3498db" id="editColor2">
+                                        <label for="editColor2" class="color-option" style="background: #3498db"></label>
+                                        
+                                        <input type="radio" name="editAvatarColor" value="#2ecc71" id="editColor3">
+                                        <label for="editColor3" class="color-option" style="background: #2ecc71"></label>
+                                        
+                                        <input type="radio" name="editAvatarColor" value="#f39c12" id="editColor4">
+                                        <label for="editColor4" class="color-option" style="background: #f39c12"></label>
+                                        
+                                        <input type="radio" name="editAvatarColor" value="#9b59b6" id="editColor5">
+                                        <label for="editColor5" class="color-option" style="background: #9b59b6"></label>
+                                        
+                                        <input type="radio" name="editAvatarColor" value="#e67e22" id="editColor6">
+                                        <label for="editColor6" class="color-option" style="background: #e67e22"></label>
+                                    </div>
+                                </div>
+                                <div class="icon-picker">
+                                    <label>Icon:</label>
+                                    <div class="icon-options">
+                                        <input type="radio" name="editAvatarIcon" value="star" id="editIcon1">
+                                        <label for="editIcon1" class="icon-option">⭐</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="heart" id="editIcon2">
+                                        <label for="editIcon2" class="icon-option">❤️</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="rocket" id="editIcon3">
+                                        <label for="editIcon3" class="icon-option">🚀</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="crown" id="editIcon4">
+                                        <label for="editIcon4" class="icon-option">👑</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="diamond" id="editIcon5">
+                                        <label for="editIcon5" class="icon-option">💎</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="lightning" id="editIcon6">
+                                        <label for="editIcon6" class="icon-option">⚡</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="flower" id="editIcon7">
+                                        <label for="editIcon7" class="icon-option">🌸</label>
+                                        
+                                        <input type="radio" name="editAvatarIcon" value="rainbow" id="editIcon8">
+                                        <label for="editIcon8" class="icon-option">🌈</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editBirthYear">Birth Year (Optional)</label>
+                        <input type="number" id="editBirthYear" name="birthYear" min="1900" max="2030">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-danger" id="deleteProfile">Delete Profile</button>
+                        <div class="form-actions-right">
+                            <button type="button" class="btn btn-secondary" id="cancelEditProfile">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h2>Delete Profile</h2>
+                <button class="profile-modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="profile-modal-body">
+                <p>Are you sure you want to delete this profile? This will permanently remove all game history and progress for this profile.</p>
+                <p><strong>This action cannot be undone.</strong></p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Yes, Delete Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/profiles.js?v=1.0"></script>
+</body>
+</html>

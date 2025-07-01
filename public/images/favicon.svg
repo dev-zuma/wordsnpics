@@ -1,0 +1,53 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Halftone dot pattern for overlay -->
+    <pattern id="halftone-favicon" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="rgba(255,255,255,0.3)" />
+    </pattern>
+    <!-- White highlight path -->
+    <linearGradient id="highlightGrad-favicon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    <filter id="shadow-favicon" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1" dy="1.5" stdDeviation="1" flood-color="rgba(0,0,0,0.4)" />
+    </filter>
+    <style>
+      .favicon-tile {
+        rx: 4;
+        ry: 4;
+        stroke: #000;
+        stroke-width: 1.5;
+        filter: url(#shadow-favicon);
+      }
+      .favicon-text {
+        font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
+        font-weight: 900;
+        font-size: 20px;
+        fill: white;
+        stroke: black;
+        stroke-width: 1;
+        paint-order: stroke fill;
+        dominant-baseline: middle;
+        text-anchor: middle;
+        user-select: none;
+      }
+    </style>
+  </defs>
+
+  <!-- W tile (left side) - Purple -->
+  <g transform="translate(2,8)">
+    <rect class="favicon-tile" width="28" height="48" fill="#9B59B6" />
+    <rect width="28" height="48" fill="url(#halftone-favicon)" />
+    <path d="M3 4 Q14 2 25 4 L25 16 Q14 14 3 16 Z" fill="url(#highlightGrad-favicon)" opacity="0.6" />
+    <text class="favicon-text" x="14" y="24">W</text>
+  </g>
+
+  <!-- L tile (right side) - Deep Blue -->
+  <g transform="translate(34,8)">
+    <rect class="favicon-tile" width="28" height="48" fill="#3498DB" />
+    <rect width="28" height="48" fill="url(#halftone-favicon)" />
+    <path d="M3 4 Q14 2 25 4 L25 16 Q14 14 3 16 Z" fill="url(#highlightGrad-favicon)" opacity="0.6" />
+    <text class="favicon-text" x="14" y="24">L</text>
+  </g>
+</svg>

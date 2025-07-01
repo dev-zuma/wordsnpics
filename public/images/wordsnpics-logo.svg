@@ -1,0 +1,131 @@
+<svg width="580" height="120" viewBox="0 0 580 120" xmlns="http://www.w3.org/2000/svg" >
+  <defs>
+    <!-- Halftone dot pattern for overlay -->
+    <pattern id="halftone" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="0.8" fill="rgba(255,255,255,0.25)" />
+    </pattern>
+    <!-- White highlight path -->
+    <linearGradient id="highlightGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="rgba(0,0,0,0.35)" />
+    </filter>
+    <style>
+      .tile {
+        rx: 12;
+        ry: 12;
+        stroke: #000;
+        stroke-width: 3;
+        filter: url(#shadow);
+        fill-opacity: 1;
+      }
+      .tile-N {
+        stroke-width: 4;
+        filter: url(#shadow);
+      }
+      .tile-text {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 900;
+        fill: white;
+        stroke: black;
+        stroke-width: 2;
+        paint-order: stroke fill;
+        dominant-baseline: middle;
+        text-anchor: middle;
+        user-select: none;
+      }
+      .tile-N {
+        font-size: 64px;
+        stroke-width: 3;
+      }
+      .tile-text:not(.tile-N) {
+        font-size: 48px;
+      }
+    </style>
+  </defs>
+
+  <!-- WORDS tiles -->
+  <!-- W tile (rotate -2deg) -->
+  <g transform="translate(5,20) rotate(-2 25 35)">
+    <rect class="tile" width="50" height="70" fill="#E67E22" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">W</text>
+  </g>
+
+  <!-- O tile (rotate 3deg) -->
+  <g transform="translate(60,20) rotate(3 25 35)">
+    <rect class="tile" width="50" height="70" fill="#E67E22" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">O</text>
+  </g>
+
+  <!-- R tile (rotate -3deg) -->
+  <g transform="translate(115,20) rotate(-3 25 35)">
+    <rect class="tile" width="50" height="70" fill="#E67E22" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">R</text>
+  </g>
+
+  <!-- D tile (rotate 2deg) -->
+  <g transform="translate(170,20) rotate(2 25 35)">
+    <rect class="tile" width="50" height="70" fill="#E67E22" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">D</text>
+  </g>
+
+  <!-- S tile (rotate -1deg) -->
+  <g transform="translate(225,20) rotate(-1 25 35)">
+    <rect class="tile" width="50" height="70" fill="#E67E22" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">S</text>
+  </g>
+
+  <!-- N tile (larger, no rotation) -->
+  <g transform="translate(280,10)">
+    <rect class="tile tile-N" width="60" height="80" fill="#1ABC9C" />
+    <rect width="60" height="80" fill="url(#halftone)" />
+    <path d="M8 10 Q30 2 52 10 L52 30 Q30 22 8 30 Z" fill="url(#highlightGrad)" opacity="0.5" />
+    <text class="tile-text tile-N" x="30" y="40">N</text>
+  </g>
+
+  <!-- PICS tiles -->
+  <!-- P tile (rotate 2deg) -->
+  <g transform="translate(350,20) rotate(2 25 35)">
+    <rect class="tile" width="50" height="70" fill="#F1C40F" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">P</text>
+  </g>
+
+  <!-- I tile (rotate -2deg) -->
+  <g transform="translate(405,20) rotate(-2 25 35)">
+    <rect class="tile" width="50" height="70" fill="#F1C40F" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">I</text>
+  </g>
+
+  <!-- C tile (rotate 3deg) -->
+  <g transform="translate(460,20) rotate(3 25 35)">
+    <rect class="tile" width="50" height="70" fill="#F1C40F" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">C</text>
+  </g>
+
+  <!-- S tile (rotate -1deg) -->
+  <g transform="translate(515,20) rotate(-1 25 35)">
+    <rect class="tile" width="50" height="70" fill="#F1C40F" />
+    <rect width="50" height="70" fill="url(#halftone)" />
+    <path d="M6 7 Q22 3 44 10 L44 20 Q22 15 6 20 Z" fill="url(#highlightGrad)" opacity="0.4" />
+    <text class="tile-text" x="25" y="35">S</text>
+  </g>
+
+</svg>

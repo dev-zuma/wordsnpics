@@ -1,0 +1,164 @@
+{
+  "id": "mc8oc9145mop7x92lc7",
+  "date": "2025-06-23",
+  "title": "Board4",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Foundations",
+      "narrative": "These words all relate to the fundamental structures or starting points of various systems. They symbolize the core basis from which everything else develops or depends upon.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750657546155.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Transitions",
+      "narrative": "These words are connected through processes of change or movement from one state to another. They represent steps or phases in a transformation or progression.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750657542733.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Knowledge and Perception",
+      "narrative": "These words are about understanding, awareness, and the way we interpret the world around us. They reflect how information is received, processed, or perceived.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750657550551.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Mystery and Discovery",
+      "narrative": "This group centers on what is hidden, unknown, or waiting to be uncovered. They symbolize the allure of exploration and the pursuit of secrets.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750657547473.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Emotional States",
+      "narrative": "These words describe fundamental human feelings that influence behavior and decision-making. They highlight internal emotional experiences.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750657547354.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "bedrock",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "seed",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "cornerstone",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "origin",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "basis",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "foundation",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "shift",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "evolve",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "transform",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "progress",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "convert",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "insight",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "perception",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "awareness",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "intuition",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "enigma",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "secret",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "reveal",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "hope",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "fear",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

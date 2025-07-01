@@ -1,0 +1,164 @@
+{
+  "id": "mc8odeiypebnqw0wdf",
+  "date": "2025-06-23",
+  "title": "Board5",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Cycles of Nature",
+      "narrative": "These words represent different stages or elements in natural cycles that repeat over time. Each one symbolizes a fundamental component that sustains or transforms the environment in a continuous loop.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750657645977.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Types of Progression",
+      "narrative": "These words describe different paths or sequences that lead from one point to another, often involving gradual change or development. They highlight various ways in which a process or journey can unfold over time.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750657648641.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Connections of Ideas",
+      "narrative": "These words are linked through the concept of linking concepts or bridging gaps—whether in thought, communication, or physical connections—forming pathways that connect separate entities.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750657651957.png"
+    },
+    {
+      "id": "img4",
+      "theme": "Powerful Forces",
+      "narrative": "These words evoke natural and abstract forces capable of creating significant change or exerting influence—elements that shape environments or outcomes through their strength.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750657647275.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Ultimate Opposites",
+      "narrative": "These words are fundamental opposites that represent contrasting states or concepts, highlighting the balance or tension between two extremes in many systems.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750657654221.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "Spring",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "Autumn",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "Rain",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "Sunlight",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "Seed",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "River",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "Staircase",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "River",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "Journey",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "Path",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "Step",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "Bridge",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "Link",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "Connection",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "Chain",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "Wind",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "Storm",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "Gravity",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "Light",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "Dark",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

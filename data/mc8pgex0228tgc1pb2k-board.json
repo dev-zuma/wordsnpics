@@ -1,0 +1,164 @@
+{
+  "id": "mc8pgex0228tgc1pb2k",
+  "date": "2025-06-23",
+  "title": "Board6",
+  "images": [
+    {
+      "id": "img1",
+      "theme": "Journey of Discovery",
+      "narrative": "These words symbolize stages or elements of a personal journey toward understanding. Starting from initial curiosity, progressing through obstacles, and finally reaching clarity, they represent different facets of exploration and growth.",
+      "matchCount": 6,
+      "url": "/images/generated/group1-1750659239692.png"
+    },
+    {
+      "id": "img2",
+      "theme": "Hidden Forces",
+      "narrative": "These words are connected by the concept of unseen influences that shape outcomes, whether in nature, society, or personal decisions. They evoke the idea of forces that operate beneath the surface, often unnoticed but deeply impactful.",
+      "matchCount": 5,
+      "url": "/images/generated/group2-1750659243140.png"
+    },
+    {
+      "id": "img3",
+      "theme": "Echoes of the Past",
+      "narrative": "These words relate to memories or remnants that persist over time, influencing the present and shaping identity. They represent trace elements, symbols, or echoes that linger from previous eras or experiences.",
+      "matchCount": 4,
+      "url": "/images/generated/group3-1750659242745.png"
+    },
+    {
+      "id": "img4",
+      "theme": "States of Mind",
+      "narrative": "These words depict different emotional or mental conditions that fluctuate and influence perception. They highlight the varied internal landscapes that affect how we interpret the world.",
+      "matchCount": 3,
+      "url": "/images/generated/group4-1750659264053.png"
+    },
+    {
+      "id": "img5",
+      "theme": "Universal Dualities",
+      "narrative": "These words embody fundamental opposites that define the human condition and the universe: presence and absence, or existence and non-existence. They reinforce the concept that dualities are intrinsic to understanding reality.",
+      "matchCount": 2,
+      "url": "/images/generated/group5-1750659374510.png"
+    }
+  ],
+  "words": [
+    {
+      "id": "w1",
+      "text": "question",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w2",
+      "text": "map",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w3",
+      "text": "compass",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w4",
+      "text": "obstacle",
+      "correctImageId": "img1",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w5",
+      "text": "light",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w6",
+      "text": "destination",
+      "correctImageId": "img1",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w7",
+      "text": "gravity",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w8",
+      "text": "magnetism",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w9",
+      "text": "electricity",
+      "correctImageId": "img2",
+      "difficulty": "easy"
+    },
+    {
+      "id": "w10",
+      "text": "wind",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w11",
+      "text": "pressure",
+      "correctImageId": "img2",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w12",
+      "text": "artifact",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w13",
+      "text": "imprint",
+      "correctImageId": "img3",
+      "difficulty": "medium"
+    },
+    {
+      "id": "w14",
+      "text": "legacy",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w15",
+      "text": "residue",
+      "correctImageId": "img3",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w16",
+      "text": "confusion",
+      "correctImageId": "img4",
+      "difficulty": "difficult"
+    },
+    {
+      "id": "w17",
+      "text": "clarity",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w18",
+      "text": "doubt",
+      "correctImageId": "img4",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w19",
+      "text": "existence",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    },
+    {
+      "id": "w20",
+      "text": "void",
+      "correctImageId": "img5",
+      "difficulty": "extremely_difficult"
+    }
+  ]
+}

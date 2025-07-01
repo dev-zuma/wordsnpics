@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate New Board - WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS Admin</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-nav">
+                <a href="/admin" class="back-link">← Back to Admin</a>
+            </div>
+            <h1>Generate New Game</h1>
+            <p>Create a new puzzle game using AI</p>
+        </header>
+
+        <main class="admin-main">
+            <div class="generation-container">
+                <!-- Step 0: Select Board -->
+                <section class="generation-step" id="step0">
+                    <h2>Select Board</h2>
+                    <p>Choose which board this game will belong to</p>
+                    <div id="boardSelector" class="board-selector">
+                        <div class="loading">Loading boards...</div>
+                    </div>
+                </section>
+
+                <!-- Step 1: Generate Words -->
+                <section class="generation-step hidden" id="step1">
+                    <h2>Step 1: Generate Words</h2>
+                    <p>Click the button below to generate 20 words in 5 groups for <span id="selectedBoardName"></span></p>
+                    <button id="generateWordsBtn" class="primary-btn">
+                        <span class="btn-icon">🎲</span>
+                        Generate Words
+                    </button>
+                    <div id="generateStatus" class="status-message"></div>
+                </section>
+
+                <!-- Step 2: Review Groups -->
+                <section class="generation-step hidden" id="step2">
+                    <h2>Step 2: Review Word Groups</h2>
+                    <div id="wordGroups" class="word-groups">
+                        <!-- Groups will be inserted here -->
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check admin access before loading the admin interface
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch('/auth/user');
+                const data = await response.json();
+                
+                if (!data.user) {
+                    window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                
+                if (data.user.email !== 'adnanzuma@gmail.com') {
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+                            <h2>Access Denied</h2>
+                            <p>You do not have permission to access the admin panel.</p>
+                            <a href="/" style="color: #2C3E50;">← Back to Game</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // User is authorized - load the admin interface
+                const script = document.createElement('script');
+                script.src = '/js/admin-generate.js?v=2.6';
+                document.body.appendChild(script);
+                
+            } catch (error) {
+                window.location.href = '/auth/google?returnTo=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS - Profile</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/images/favicon-32.svg" type="image/svg+xml" sizes="32x32">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View WORDSNPICS profile stats, game history, and achievements.">
+    <meta name="keywords" content="wordsnpics profile, game stats, puzzle history, word game progress">
+    <meta name="author" content="WORDSNPICS">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WORDSNPICS">
+    <meta property="og:title" content="WORDSNPICS - Profile">
+    <meta property="og:description" content="View WORDSNPICS profile stats, game history, and achievements.">
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#2C3E50">
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/profile-view.css?v=1.3">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="/images/wordsnpics-logo.svg?v=4.0" alt="WORDSNPICS" class="game-logo">
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="user-section" id="userSection">
+                    <!-- User info will be inserted here -->
+                </div>
+            </div>
+        </header>
+
+        <main class="profile-view-main">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="loading-icon">👤</div>
+                <h2>Loading profile...</h2>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <div class="error-icon">❌</div>
+                <h2>Profile Not Found</h2>
+                <p id="errorMessage">This profile does not exist or you don't have permission to view it.</p>
+                <a href="/profiles" class="btn btn-primary">Back to Profiles</a>
+            </div>
+
+            <!-- Profile Content -->
+            <div id="profileContent" class="profile-content" style="display: none;">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <!-- Avatar will be inserted here -->
+                        </div>
+                        <h1 class="profile-name" id="profileName">Profile Name</h1>
+                    </div>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="stats-section">
+                    <h2 class="section-title">Key Stats</h2>
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Game History -->
+                <div class="history-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Game History</h2>
+                        <div class="history-filters">
+                            <select id="boardTypeFilter" class="filter-select">
+                                <option value="all">All Board Types</option>
+                                <!-- Board types will be loaded here -->
+                            </select>
+                            <select id="resultFilter" class="filter-select">
+                                <option value="all">All Results</option>
+                                <option value="wins">Wins Only</option>
+                                <option value="recent">Recent (30 days)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="games-grid" id="gamesGrid">
+                        <!-- Game cards will be inserted here -->
+                    </div>
+                    
+                    <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                        <button id="loadMoreBtn" class="load-more-btn">Load More Games</button>
+                    </div>
+                    
+                    <div id="noGamesMessage" class="no-games-message" style="display: none;">
+                        <p>No games found for the selected filters.</p>
+                    </div>
+                    
+                    <div id="loadingGames" class="loading-games" style="display: none;">
+                        <p>Loading game history...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <span class="footer-text">
+                WORDS<span style="font-size: 1.2em; font-weight: bold;">N</span>PICS © 2025
+            </span>
+        </footer>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/profile-view.js?v=1.3"></script>
+</body>
+</html>
