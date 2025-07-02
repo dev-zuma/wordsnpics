@@ -241,20 +241,31 @@ class WORDLINKSGame {
             const isDailyRequest = this.selectedBoardType && this.selectedBoardType !== 'demo';
             
             if (isDailyRequest) {
-                // Try to load today's daily puzzle
-                const dailyResponse = await fetch(`/api/daily-puzzle/${this.selectedBoardType}?t=${Date.now()}`);
+                // Try to load today's daily puzzle - first try board-specific endpoint
+                let dailyResponse = await fetch(`/api/daily-puzzle/${this.selectedBoardType}?t=${Date.now()}`);
+                
+                // If board-specific fails and we're looking for default daily, try general endpoint
+                if (!dailyResponse.ok && this.selectedBoardType === 'wordsnpics-daily') {
+                    console.log('Board-specific daily puzzle not found, trying general daily puzzle');
+                    dailyResponse = await fetch(`/api/puzzle/daily?t=${Date.now()}`);
+                }
                 
                 if (dailyResponse.ok) {
                     const dailyData = await dailyResponse.json();
                     
-                    if (!dailyData.available) {
-                        // Puzzle not available yet - show countdown
-                        this.showPuzzleCountdown(dailyData);
-                        return;
+                    // Handle board-specific response format (has nested puzzle)
+                    if (dailyData.puzzle) {
+                        if (!dailyData.available) {
+                            // Puzzle not available yet - show countdown
+                            this.showPuzzleCountdown(dailyData);
+                            return;
+                        }
+                        this.puzzleData = dailyData.puzzle;
+                    } else {
+                        // Handle general daily puzzle response format (direct puzzle data)
+                        this.puzzleData = dailyData;
                     }
                     
-                    // Puzzle is available
-                    this.puzzleData = dailyData.puzzle;
                     this.renderCarousel();
                     this.renderWords();
                     this.initImageUsageCounts();
