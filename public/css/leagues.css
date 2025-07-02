@@ -1138,13 +1138,8 @@
     justify-content: center;
     margin-bottom: 0.5rem;
     width: 100%;
-    overflow: visible;
-}
-
-@media (min-width: 768px) {
-    .table-controls {
-        justify-content: flex-end;
-    }
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
 /* Toggle Switch Styles */
