@@ -278,7 +278,16 @@ class LeagueService {
                             ELSE 0 
                         END, 1
                     ) as word_percentage,
-                    AVG(CASE WHEN gs.time_elapsed IS NOT NULL THEN gs.time_elapsed ELSE NULL END) as avg_time_seconds,
+                    AVG(CASE 
+                        WHEN gs.time_elapsed IS NOT NULL AND gs.time_elapsed != '' 
+                        THEN CASE 
+                            WHEN gs.time_elapsed LIKE '%:%' 
+                            THEN (CAST(SUBSTR(gs.time_elapsed, 1, INSTR(gs.time_elapsed, ':') - 1) AS INTEGER) * 60) + 
+                                 CAST(SUBSTR(gs.time_elapsed, INSTR(gs.time_elapsed, ':') + 1) AS INTEGER)
+                            ELSE 0 
+                        END 
+                        ELSE NULL 
+                    END) as avg_time_seconds,
                     MAX(gs.completed_at) as last_played
                 FROM league_members lm
                 JOIN profiles p ON lm.profile_id = p.id
@@ -288,7 +297,7 @@ class LeagueService {
                 ${timeFilter}
                 ${boardTypeFilter}
                 GROUP BY lm.user_id, lm.profile_id
-                ORDER BY games_won DESC, win_percentage DESC, word_percentage DESC
+                ORDER BY win_percentage DESC, word_percentage DESC, avg_time_seconds ASC
                 LIMIT ?
             `;
 

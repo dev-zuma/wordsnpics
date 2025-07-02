@@ -182,13 +182,15 @@ class LeagueDetailsManager {
             return;
         }
 
-        // Add toggle button for expand/collapse
+        // Add toggle switch for expand/collapse
         const isExpanded = this.isTableExpanded('overall');
         const toggleButton = `
             <div class="table-controls">
-                <button class="toggle-table-btn" data-table="overall">
-                    ${isExpanded ? 'Collapse' : 'Expand'} View
-                </button>
+                <label class="toggle-switch" data-table="overall">
+                    <input type="checkbox" ${isExpanded ? 'checked' : ''}>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">${isExpanded ? 'Expanded' : 'Collapsed'} View</span>
+                </label>
             </div>
         `;
 
@@ -249,9 +251,11 @@ class LeagueDetailsManager {
             const isExpanded = this.isTableExpanded(boardType);
             const toggleButton = `
                 <div class="table-controls">
-                    <button class="toggle-table-btn" data-table="${boardType}">
-                        ${isExpanded ? 'Collapse' : 'Expand'} View
-                    </button>
+                    <label class="toggle-switch" data-table="${boardType}">
+                        <input type="checkbox" ${isExpanded ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">${isExpanded ? 'Expanded' : 'Collapsed'} View</span>
+                    </label>
                 </div>
             `;
             
@@ -398,9 +402,9 @@ class LeagueDetailsManager {
         });
 
         // Table toggle functionality
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('toggle-table-btn')) {
-                const tableId = e.target.getAttribute('data-table');
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox' && e.target.closest('.toggle-switch')) {
+                const tableId = e.target.closest('.toggle-switch').getAttribute('data-table');
                 this.toggleTable(tableId);
             }
         });

@@ -544,7 +544,13 @@ class WordsnpicsDatabaseService {
     parseTimeToSeconds(timeString) {
         if (!timeString) return 0;
         
-        // Parse formats like "2m 30s" or "45s"
+        // Handle "mm:ss" format (e.g., "2:45")
+        if (timeString.includes(':')) {
+            const [minutes, seconds] = timeString.split(':').map(Number);
+            return (minutes * 60) + seconds;
+        }
+        
+        // Parse formats like "2m 30s" or "45s" (legacy format)
         const parts = timeString.split(' ');
         let seconds = 0;
         

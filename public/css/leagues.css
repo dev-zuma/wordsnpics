@@ -1135,18 +1135,65 @@
 /* Table Toggle Controls */
 .table-controls {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-bottom: 0.5rem;
+    width: 100%;
+    overflow: visible;
 }
 
-.toggle-table-btn {
-    background: var(--secondary);
-    color: var(--primary);
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
+@media (min-width: 768px) {
+    .table-controls {
+        justify-content: flex-end;
+    }
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--primary);
+}
+
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    width: 48px;
+    height: 24px;
+    background: #ddd;
+    border-radius: 12px;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+    background: var(--success);
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider::before {
+    transform: translateX(24px);
+}
+
+.toggle-label {
+    user-select: none;
     cursor: pointer;
     transition: all 0.2s ease;
 }
