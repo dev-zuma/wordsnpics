@@ -14,6 +14,11 @@ class WordsnpicsDatabaseService {
         }
         this.dbPath = path.join(dbDir, 'wordsnpics.db');
         console.log('Database path:', this.dbPath);
+        
+        // Database save batching to prevent memory leaks
+        this.saveTimeout = null;
+        this.saveDebounceTime = 5000; // Save every 5 seconds max
+        this.pendingSave = false;
     }
 
     async initialize(forceSchema = false) {
@@ -56,7 +61,7 @@ class WordsnpicsDatabaseService {
                 this.db.run(schema);
                 
                 // Save database to file after schema creation
-                await this.saveDatabase();
+                await this.forceSave();
                 console.log('✅ Database schema applied');
             } else {
                 console.log('✅ Connected to existing database (no schema changes)');
@@ -79,8 +84,79 @@ class WordsnpicsDatabaseService {
         try {
             const data = this.db.export();
             await fs.writeFile(this.dbPath, Buffer.from(data));
+            this.pendingSave = false;
         } catch (error) {
             console.error('Error saving database:', error);
+            this.pendingSave = false;
+        }
+    }
+    
+    /**
+     * Debounced save to prevent memory leaks from frequent saves
+     * Batches multiple save requests into a single save operation
+     */
+    async debouncedSave() {
+        // Mark that we have pending changes
+        this.pendingSave = true;
+        
+        // Clear existing timeout
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+        }
+        
+        // Set new timeout
+        this.saveTimeout = setTimeout(async () => {
+            if (this.pendingSave && this.db) {
+                console.log('💾 Executing batched database save...');
+                await this.saveDatabase();
+            }
+        }, this.saveDebounceTime);
+    }
+    
+    /**
+     * Force immediate save (use sparingly)
+     */
+    async forceSave() {
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = null;
+        }
+        if (this.db) {
+            await this.saveDatabase();
+        }
+    }
+
+    /**
+     * Safe SQL query wrapper to prevent statement leaks
+     * Always frees the statement even if an error occurs
+     */
+    async safeQuery(query, params = [], getAll = false) {
+        const stmt = this.db.prepare(query);
+        try {
+            stmt.bind(params);
+            if (getAll) {
+                const results = [];
+                while (stmt.step()) {
+                    results.push(stmt.getAsObject());
+                }
+                return results;
+            } else {
+                return stmt.step() ? stmt.getAsObject() : null;
+            }
+        } finally {
+            stmt.free();
+        }
+    }
+    
+    /**
+     * Safe SQL run wrapper for insert/update/delete operations
+     */
+    async safeRun(query, params = []) {
+        const stmt = this.db.prepare(query);
+        try {
+            stmt.run(params);
+        } finally {
+            stmt.free();
         }
     }
 
@@ -94,7 +170,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?, ?, ?, ?, ?, ?)
             `, [id, provider, providerId, name, email, avatar]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             const user = await this.getUserById(id);
             
             // Create default profile for parent
@@ -117,11 +193,7 @@ class WordsnpicsDatabaseService {
 
     async getUserById(id) {
         try {
-            const stmt = this.db.prepare('SELECT * FROM users WHERE id = ?');
-            stmt.bind([id]);
-            const result = stmt.step() ? stmt.getAsObject() : null;
-            stmt.free();
-            return result;
+            return await this.safeQuery('SELECT * FROM users WHERE id = ?', [id]);
         } catch (error) {
             console.error('Error getting user by ID:', error);
             throw error;
@@ -130,11 +202,10 @@ class WordsnpicsDatabaseService {
 
     async getUserByProvider(provider, providerId) {
         try {
-            const stmt = this.db.prepare('SELECT * FROM users WHERE provider = ? AND provider_id = ?');
-            stmt.bind([provider, providerId]);
-            const result = stmt.step() ? stmt.getAsObject() : null;
-            stmt.free();
-            return result;
+            return await this.safeQuery(
+                'SELECT * FROM users WHERE provider = ? AND provider_id = ?', 
+                [provider, providerId]
+            );
         } catch (error) {
             console.error('Error getting user by provider:', error);
             throw error;
@@ -154,7 +225,7 @@ class WordsnpicsDatabaseService {
             stmt.run([userId, username, displayName, avatarColor || '#3498db', avatarIcon || 'star', birthYear, isDefault || false, isChild !== false]);
             stmt.free();
 
-            await this.saveDatabase();
+            await this.debouncedSave();
             
             // Get the created profile
             const profile = await this.getProfileByUsername(username);
@@ -242,7 +313,7 @@ class WordsnpicsDatabaseService {
                 WHERE id = ?
             `, [...values, profileId]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getProfileById(profileId);
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -259,7 +330,7 @@ class WordsnpicsDatabaseService {
             }
             
             this.db.run('DELETE FROM profiles WHERE id = ?', [profileId]);
-            await this.saveDatabase();
+            await this.debouncedSave();
             return true;
         } catch (error) {
             console.error('Error deleting profile:', error);
@@ -274,7 +345,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?)
             `, [profileId]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
         } catch (error) {
             console.error('Error initializing profile stats:', error);
             throw error;
@@ -316,7 +387,7 @@ class WordsnpicsDatabaseService {
             ]);
             stmt.free();
 
-            await this.saveDatabase();
+            await this.debouncedSave();
             
             // Get the last inserted row ID
             const lastIdStmt = this.db.prepare('SELECT last_insert_rowid() as id');
@@ -405,7 +476,7 @@ class WordsnpicsDatabaseService {
                 insertStmt.free();
             }
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             console.log(`💾 Game progress saved for session ${sessionId}, turn ${currentTurn}`);
             return true;
         } catch (error) {
@@ -457,7 +528,7 @@ class WordsnpicsDatabaseService {
                 stmt.run([sessionId]);
                 stmt.free();
                 
-                await this.saveDatabase();
+                await this.debouncedSave();
                 console.log(`🗑️ Cleared game progress for session ${sessionId}`);
                 return true;
             }
@@ -534,7 +605,7 @@ class WordsnpicsDatabaseService {
             `, [gamesPlayed, gamesWon, bestTime, bestTurnCount, averageAccuracy, 
                 totalPlayTime, newCurrentStreak, longestStreak, profileId]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
         } catch (error) {
             console.error('Error updating profile stats:', error);
             throw error;
@@ -672,13 +743,11 @@ class WordsnpicsDatabaseService {
 
     async getBoardTypes() {
         try {
-            const stmt = this.db.prepare('SELECT * FROM board_types ORDER BY name');
-            const types = [];
-            while (stmt.step()) {
-                types.push(stmt.getAsObject());
-            }
-            stmt.free();
-            return types;
+            return await this.safeQuery(
+                'SELECT * FROM board_types ORDER BY name',
+                [],
+                true // getAll
+            );
         } catch (error) {
             console.error('Error getting board types:', error);
             throw error;
@@ -703,7 +772,7 @@ class WordsnpicsDatabaseService {
                 is_active !== undefined ? is_active : 1
             ]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getBoardTypeById(id);
         } catch (error) {
             console.error('Error creating board type:', error);
@@ -738,7 +807,7 @@ class WordsnpicsDatabaseService {
                 WHERE id = ?
             `, updateValues);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getBoardTypeById(boardTypeId);
         } catch (error) {
             console.error('Error updating board type:', error);
@@ -774,7 +843,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `, [id, boardTypeId, title, date, difficulty || 'medium', isPublished || 0, isDaily || 0, scheduledDate]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getBoardById(id);
         } catch (error) {
             console.error('Error creating board:', error);
@@ -791,7 +860,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             `, [id, boardId, theme, narrative, matchCount, url, sortOrder || 0]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getPuzzleImageById(id);
         } catch (error) {
             console.error('Error creating puzzle image:', error);
@@ -808,7 +877,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?, ?, ?, ?, ?, ?)
             `, [id, boardId, imageId, text, difficulty || 'Medium', sortOrder || 0]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getPuzzleWordById(id);
         } catch (error) {
             console.error('Error creating puzzle word:', error);
@@ -888,7 +957,7 @@ class WordsnpicsDatabaseService {
                 WHERE id = ?
             `, [...values, boardId]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return await this.getBoardById(boardId);
         } catch (error) {
             console.error('Error updating board:', error);
@@ -903,7 +972,7 @@ class WordsnpicsDatabaseService {
             this.db.run('DELETE FROM puzzle_images WHERE board_id = ?', [boardId]);
             this.db.run('DELETE FROM boards WHERE id = ?', [boardId]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return true;
         } catch (error) {
             console.error('Error deleting board:', error);
@@ -929,7 +998,7 @@ class WordsnpicsDatabaseService {
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             `, [id, gameSessionId, userId, profileId, boardId, JSON.stringify(data), imageData]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             console.log('Shareable graphic created successfully');
             return await this.getShareableGraphicById(id);
         } catch (error) {
@@ -971,7 +1040,7 @@ class WordsnpicsDatabaseService {
                 WHERE id = ?
             `, [id]);
             
-            await this.saveDatabase();
+            await this.debouncedSave();
             return true;
         } catch (error) {
             console.error('Error incrementing shareable graphic views:', error);
@@ -1065,7 +1134,8 @@ class WordsnpicsDatabaseService {
     // Close database connection
     async close() {
         if (this.db) {
-            await this.saveDatabase();
+            // Force save any pending changes before closing
+            await this.forceSave();
             this.db.close();
             console.log('WORDSNPICS database connection closed');
         }

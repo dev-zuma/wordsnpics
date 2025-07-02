@@ -237,6 +237,31 @@ class WORDLINKSGame {
         }
     }
     
+    /**
+     * Clean up all resources to prevent memory leaks
+     */
+    cleanup() {
+        // Clear all intervals
+        this.clearCountdownIntervals();
+        
+        // Remove event listeners
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+        }
+        if (this.beforeUnloadHandler) {
+            window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+        }
+        
+        // Clear references
+        this.puzzleData = null;
+        this.correctWords = null;
+        this.placements = null;
+        this.wordTurns = null;
+        this.turnHistory = null;
+        
+        console.log('🧹 Game instance cleaned up');
+    }
+    
     async loadPuzzle() {
         try {
             // Check if this is a daily puzzle request
@@ -354,8 +379,11 @@ class WORDLINKSGame {
         updateCountdown(); // Initial update
         const interval = setInterval(updateCountdown, 1000);
         
-        // Clear interval when page unloads
-        window.addEventListener('beforeunload', () => clearInterval(interval));
+        // Store interval for cleanup (no need for beforeunload - cleanup handles it)
+        if (!this.countdownIntervals) {
+            this.countdownIntervals = [];
+        }
+        this.countdownIntervals.push(interval);
     }
     
     initImageUsageCounts() {
@@ -563,11 +591,12 @@ class WORDLINKSGame {
         prevBtn.addEventListener('click', () => this.previousSlide());
         nextBtn.addEventListener('click', () => this.nextSlide());
         
-        // Add keyboard navigation
-        document.addEventListener('keydown', (e) => {
+        // Add keyboard navigation (store handler for cleanup)
+        this.keydownHandler = (e) => {
             if (e.key === 'ArrowLeft') this.previousSlide();
             if (e.key === 'ArrowRight') this.nextSlide();
-        });
+        };
+        document.addEventListener('keydown', this.keydownHandler);
         
         // Add swipe support
         this.setupSwipeGestures();
@@ -1638,5 +1667,28 @@ window.viewGameResults = async function(sessionId) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Clean up any existing game instance to prevent memory leaks
+    if (window.gameInstance) {
+        if (window.gameInstance.clearCountdownIntervals) {
+            window.gameInstance.clearCountdownIntervals();
+        }
+        if (window.gameInstance.cleanup) {
+            window.gameInstance.cleanup();
+        }
+    }
+    
     window.gameInstance = new WORDLINKSGame();
+});
+
+// Clean up when page unloads to prevent memory leaks
+window.addEventListener('beforeunload', () => {
+    if (window.gameInstance) {
+        if (window.gameInstance.clearCountdownIntervals) {
+            window.gameInstance.clearCountdownIntervals();
+        }
+        if (window.gameInstance.cleanup) {
+            window.gameInstance.cleanup();
+        }
+        window.gameInstance = null;
+    }
 });

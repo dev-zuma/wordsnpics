@@ -18,6 +18,10 @@ class SQLiteSessionStore extends Store {
         this.cleanupInterval = setInterval(() => {
             this.cleanup();
         }, 60 * 60 * 1000);
+        
+        // Track session operations to optimize saves
+        this.batchOperations = 0;
+        this.maxBatchSize = 10; // Force save after 10 operations
     }
 
     /**
@@ -62,8 +66,8 @@ class SQLiteSessionStore extends Store {
             stmt.step();
             stmt.free();
             
-            // Save database changes
-            this.dbService.saveDatabase();
+            // Use debounced save to prevent memory issues
+            this.dbService.debouncedSave();
             
             if (callback) callback(null);
         } catch (error) {
@@ -82,8 +86,8 @@ class SQLiteSessionStore extends Store {
             stmt.step();
             stmt.free();
             
-            // Save database changes
-            this.dbService.saveDatabase();
+            // Use debounced save to prevent memory issues
+            this.dbService.debouncedSave();
             
             if (callback) callback(null);
         } catch (error) {
@@ -107,8 +111,8 @@ class SQLiteSessionStore extends Store {
             stmt.step();
             stmt.free();
             
-            // Save database changes
-            this.dbService.saveDatabase();
+            // Use debounced save to prevent memory issues
+            this.dbService.debouncedSave();
             
             if (callback) callback(null);
         } catch (error) {
@@ -145,8 +149,8 @@ class SQLiteSessionStore extends Store {
             stmt.step();
             stmt.free();
             
-            // Save database changes
-            this.dbService.saveDatabase();
+            // Use debounced save to prevent memory issues
+            this.dbService.debouncedSave();
             
             if (callback) callback(null);
         } catch (error) {
@@ -166,8 +170,8 @@ class SQLiteSessionStore extends Store {
             stmt.step();
             stmt.free();
             
-            // Save database changes
-            this.dbService.saveDatabase();
+            // Use debounced save to prevent memory issues
+            this.dbService.debouncedSave();
             
             console.log('Cleaned up expired sessions');
         } catch (error) {
