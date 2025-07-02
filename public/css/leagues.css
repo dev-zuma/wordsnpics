@@ -1135,10 +1135,10 @@
 /* Table Toggle Controls */
 .table-controls {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 0.5rem;
     width: 100%;
-    padding: 0 1rem;
+    padding-left: 0.25rem; /* Match table padding */
     box-sizing: border-box;
 }
 
