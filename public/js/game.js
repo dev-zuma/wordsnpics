@@ -179,7 +179,8 @@ class WORDLINKSGame {
         const now = new Date();
         const tomorrow = new Date(now);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T12:00:00.000Z`);
+        // Puzzles launch at 00:00:00 UTC (midnight UTC)
+        const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T00:00:00.000Z`);
         
         const timeUntilNext = tomorrowRelease.getTime() - now.getTime();
         const hours = Math.floor(timeUntilNext / (1000 * 60 * 60));
@@ -193,7 +194,8 @@ class WORDLINKSGame {
             const now = new Date();
             const tomorrow = new Date(now);
             tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T12:00:00.000Z`);
+            // Puzzles launch at 00:00:00 UTC (midnight UTC)
+            const tomorrowRelease = new Date(`${tomorrow.toISOString().split('T')[0]}T00:00:00.000Z`);
             
             const timeUntilNext = tomorrowRelease.getTime() - now.getTime();
             
@@ -312,7 +314,7 @@ class WORDLINKSGame {
             <div class="countdown-container">
                 <div class="countdown-icon">⏰</div>
                 <h2 class="countdown-title">Today's Puzzle<br>Coming Soon!</h2>
-                <p class="countdown-message">Today's puzzle will be available at<br><strong>12:00 PM UTC</strong></p>
+                <p class="countdown-message">Today's puzzle will be available at<br><strong>12:00 AM UTC (Midnight)</strong></p>
                 <div id="countdown" class="countdown-timer">
                     --:--:--
                 </div>

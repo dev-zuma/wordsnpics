@@ -568,32 +568,37 @@ router.get('/board-types', async (req, res) => {
 router.get('/daily-puzzle/:boardType', async (req, res) => {
   try {
     const { boardType } = req.params;
-    const currentDate = new Date().toISOString().split('T')[0];
+    // Use UTC date consistently - puzzles launch at 00:00:00 UTC
+    const now = new Date();
+    const currentDateUTC = now.toISOString().split('T')[0];
+    
+    console.log(`🎮 Daily puzzle request for ${boardType} on ${currentDateUTC} (UTC)`);
     
     // Add cache headers for proper timing
     res.set({
       'Cache-Control': 'public, max-age=300', // 5 minute cache
       'Pragma': 'cache',
-      'Last-Modified': new Date().toUTCString()
+      'Last-Modified': now.toUTCString()
     });
     
     // Use new database service for daily puzzles
     const wordsnpicsDb = require('../database/wordsnpics-db');
     
-    // Get the daily puzzle for today
+    // Get the daily puzzle for today (UTC)
     const boards = await wordsnpicsDb.getAllBoards(boardType, true);
     
-    // Find today's daily puzzle
+    // Find today's daily puzzle using UTC date
     const dailyBoard = boards.find(board => 
       board.is_daily && 
-      board.scheduled_date === currentDate &&
+      board.scheduled_date === currentDateUTC &&
       board.is_published
     );
     
     if (!dailyBoard) {
       return res.status(404).json({ 
         error: 'No daily puzzle available',
-        message: `No daily puzzle found for ${boardType} on ${currentDate}`,
+        message: `No daily puzzle found for ${boardType} on ${currentDateUTC}`,
+        currentDateUTC: currentDateUTC,
         availableDate: null
       });
     }
@@ -605,20 +610,9 @@ router.get('/daily-puzzle/:boardType', async (req, res) => {
       return res.status(404).json({ error: 'Board content not found' });
     }
     
-    // Check if this puzzle should be released yet (12 PM UTC)
-    const releaseTime = new Date(`${currentDate}T12:00:00.000Z`);
-    const now = new Date();
+    console.log(`✅ Found daily puzzle: ${fullBoard.title} (${fullBoard.id})`);
     
-    if (now < releaseTime) {
-      const timeUntilRelease = releaseTime.getTime() - now.getTime();
-      return res.json({
-        available: false,
-        releaseTime: releaseTime.toISOString(),
-        timeUntilRelease: timeUntilRelease,
-        message: 'Today\'s puzzle will be available at 12:00 PM UTC',
-        boardType: boardType
-      });
-    }
+    // Puzzles are available immediately at 00:00:00 UTC - no release time check needed
     
     // Shuffle words for gameplay
     const shuffleArray = (array) => {

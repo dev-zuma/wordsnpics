@@ -982,7 +982,8 @@ class WordsnpicsDatabaseService {
     // Check if user has completed today's puzzle for a specific board type
     async hasUserCompletedTodaysPuzzle(userId, profileId, boardType) {
         try {
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            // Use UTC date consistently - puzzles launch at 00:00:00 UTC
+            const todayUTC = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
             
             const stmt = this.db.prepare(`
                 SELECT gs.*, b.board_type_id, b.title as puzzle_title
@@ -996,7 +997,7 @@ class WordsnpicsDatabaseService {
                 LIMIT 1
             `);
             
-            stmt.bind([userId, profileId, boardType, today]);
+            stmt.bind([userId, profileId, boardType, todayUTC]);
             const result = stmt.step() ? stmt.getAsObject() : null;
             stmt.free();
             
@@ -1035,7 +1036,8 @@ class WordsnpicsDatabaseService {
     // Get completion status for all board types for a user
     async getUserDailyCompletionStatus(userId, profileId) {
         try {
-            const today = new Date().toISOString().split('T')[0];
+            // Use UTC date consistently - puzzles launch at 00:00:00 UTC
+            const todayUTC = new Date().toISOString().split('T')[0];
             
             // Get all board types
             const boardTypes = await this.getBoardTypes();
