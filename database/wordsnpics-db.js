@@ -877,47 +877,6 @@ class WordsnpicsDatabaseService {
         }
     }
 
-    async getDailyBoard(date = null) {
-        try {
-            const targetDate = date || new Date().toISOString().split('T')[0];
-            
-            const stmt = this.db.prepare(`
-                SELECT * FROM boards 
-                WHERE is_daily = 1 
-                AND is_published = 1 
-                AND (scheduled_date = ? OR scheduled_date IS NULL)
-                ORDER BY created_at DESC 
-                LIMIT 1
-            `);
-            
-            stmt.bind([targetDate]);
-            let board = null;
-            if (stmt.step()) {
-                board = stmt.getAsObject();
-            }
-            stmt.free();
-            
-            if (!board) {
-                return null;
-            }
-            
-            // Get images and words for the board
-            const [images, words] = await Promise.all([
-                this.getPuzzleImagesByBoardId(board.id),
-                this.getPuzzleWordsByBoardId(board.id)
-            ]);
-            
-            return {
-                ...board,
-                images,
-                words
-            };
-        } catch (error) {
-            console.error('Error getting daily board:', error);
-            throw error;
-        }
-    }
-
     async updateBoard(boardId, updates) {
         try {
             const setClause = Object.keys(updates).map(key => `${key} = ?`).join(', ');
